@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    {% load static %}
+    <title>Customer Service Dashboard | HandiQ</title>
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'serviceproviderdas.css' %}?v={{ STATIC_VERSION }}">
+
+    
+</head>
+
+<body>
+    <div id='kyc-message'>
+        <h1 id="kyc-message">{{ kyc_message }}</h1>
+    </div>
+    <div class="dashboard-container">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="navbar-content">
+                <div class="navbar-left">
+                    <h1 id="welcome-message">Welcome ,{{ username }}</h1>
+                </div>
+                <div class="navbar-right">
+                    <a href="index.html">
+                        <button id="logout-btn">Logout</button>
+                    </a> 
+                </div>
+                <div id= kyc-link>
+                    {% if kyc_link %}
+                        <a href="/kyc-verification/">{{ kyc_link }}</a>
+                    {% endif %}
+                                    
+                </div>
+            </div>
+        </nav>
+        
+        <div class="status-container">
+            <h1>Customer Service Dashboard</h1>
+            <div class="status-toggle" id="status-toggle"></div>
+        </div>
+        <div class="status-message online" id="status-online">
+            <div class="spinner"></div>
+            <p>Waiting for your job...</p>
+        </div>
+        <div class="status-message offline" id="status-offline">
+            <div class="spinner"></div>
+            <p>You are offline <i class="fas fa-sad-tear"></i></p>
+        </div>
+    </div>
+
+
+    <div id="logoutModal" class="modal">
+        <div class="modal-content">
+            <p>Are you sure you want to log out?</p>
+            <button id="confirmLogout">Yes</button>
+            <button id="cancelLogout">No</button>
+        </div>
+    </div>
+    
+    
+    <script src='{% static "logout.js" %}'></script>
+    <script src='{% static "serviceproviserlocation.js" %}'></script>
+    <script src='{% static "tooglebutton.js" %}'></script>
+    
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+.kyc-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.kyc-form input,
+.kyc-form textarea {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.kyc-form button {
+    padding: 10px 20px;
+    background-color: #512da8;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.kyc-form button:hover {
+    background-color: #3e1d8a;
+}
+
+.upload-container {
+    margin-bottom: 15px;
+}
+
+.upload-container input[type="file"] {
+    display: block;
+    margin: 0 auto;
+}

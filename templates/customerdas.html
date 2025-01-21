@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'customerdas.css' %}?v={{ STATIC_VERSION }}">
+    <title>Welcome | HandiQ</title>
+    <style>
+        body {
+            background: url("{% static 'images/carpenter.svg' %}");
+            font-family: 'Arial', sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #fff;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        .hamburger-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .hamburger-menu div {
+            width: 25px;
+            height: 3px;
+            background-color: #fff;
+            margin: 4px 0;
+        }
+
+        .menu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background-color: #333;
+            border-radius: 5px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu.active {
+            display: block;
+        }
+
+        .menu ul {
+            list-style: none;
+            padding: 10px;
+            margin: 0;
+        }
+
+        .menu ul li {
+            margin: 10px 0;
+        }
+
+        .menu ul li a {
+            color: #fff;
+            text-decoration: none;
+            display: block;
+        }
+
+        .menu ul li a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .hamburger-menu {
+                display: flex;
+            }
+
+            .profile-dropdown {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <a href="/customerdashboard/"><img src="{% static 'images/logo.svg' %}" alt="HandiQ" width="110px"></a>
+        </div>
+        <div class="hamburger-menu" id="hamburger-menu">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="menu" id="menu">
+            <ul>
+                <li><a href="/view-profile/">View Profile</a></li>
+                <li><a href="#" id="logout-btn">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="welcome-container">
+        <h1>Welcome to HandiQ</h1>
+        <p>Find exactly what you need</p>
+        <div class="search-bar">
+
+            <form action="{% url 'search_service_providers' %}" method="get">
+                <input type="text" id="search-input" name="service_type" list="services" placeholder="What are you looking for?" autocomplete="off">
+                <datalist id="services">
+                    <option value="Carpenter">
+                    <option value="Painter">
+                    <option value="Electrician">
+                    <option value="Plumber">
+                </datalist>
+                <button type="submit"><i class="fas fa-search"></i> Search</button>
+</form>
+        </div>
+    </div>
+
+    <div id="logoutModal" class="modal">
+        <div class="modal-content">
+            <p>Are you sure you want to log out?</p>
+            <button id="confirmLogout">Yes</button>
+            <button id="cancelLogout">No</button>
+        </div>
+    </div>
+
+    <script src="{% static 'customerdas.js' %}"></script>
+    <script src="{% static 'logout.js' %}"></script>
+    <script src="{% static 'customerlocation.js' %}"></script>
+    <script>
+        document.getElementById('hamburger-menu').addEventListener('click', function() {
+            document.getElementById('menu').classList.toggle('active');
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            document.getElementById('logoutModal').style.display = 'block';
+        });
+
+        document.getElementById('cancelLogout').addEventListener('click', function() {
+            document.getElementById('logoutModal').style.display = 'none';
+        });
+    </script>
+</body>
+
+</html>

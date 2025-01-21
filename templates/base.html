@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HandiQ - Home Services</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'customerdas.css' %}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <a href="/customerdashboard/">
+                <img src="{% static 'images/logo.svg' %}" alt="HandiQ" width="110px">
+            </a>
+        </div>
+        <div class="profile-dropdown">
+            <div class="profile-image" id="profile">
+                <img src="{% static 'images/profile_placeholder.png' %}" alt="Profile">
+                <ul class="dropdown-menu" id="dropdown">
+                    <li><a href="/view-profile/">View Profile</a></li>
+                    <li type="button" id="logout-btn"><a href="#">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <footer>
+        <p>&copy; 2025 HandiQ. All rights reserved.</p>
+    </footer>
+
+    <script src="{% static 'logout.js' %}"></script>
+    <script src="{% static 'customerdas.js.js' %}"></script>
+
+</body>
+</html>

@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Nearest {{ service_type }} Providers</h1>
+
+    <div id="map" style="height: 500px; width: 100%;"></div>
+
+    <ul style="color: black; list-style-type: none; padding-left: 0;">
+        {% for provider in service_providers %}
+            <li>
+                <strong>{{ provider.service_provider.user.kyc.name }}</strong> - 
+                {{ provider.service_provider.phone }} 
+                <a href="/book/{{ provider.service_provider.user.id }}/" class="btn btn-primary">Book Now</a>
+            </li>
+        {% empty %}
+            <li>No service providers found.</li>
+        {% endfor %}
+    </ul>
+
+    <script src="https://openlayers.org/en/v6.14.1/build/ol.js"></script>
+
+    <script>
+        // Initialize the map
+        var map = new ol.Map({
+            target: 'map',
+            layers: [
+                new ol.layer.Tile({
+                    source: new ol.source.OSM()
+                })
+            ],
+            view: new ol.View({
+                center: ol.proj.fromLonLat([{{ customer_location.longitude }}, {{ customer_location.latitude }}]),
+                zoom: 12  // Initial city-level zoom
+            })
+        });
+
+        // Service provider locations
+        var serviceProviders = [
+            {% for provider in service_providers %}
+                {
+                    name: "{{ provider.service_provider.user.kyc.name }}",
+                    coordinates: [{{ provider.longitude }}, {{ provider.latitude }}]
+                },
+            {% endfor %}
+        ];
+
+        var vectorSource = new ol.source.Vector();
+        var extent = ol.extent.createEmpty();  // To dynamically adjust map view
+
+        serviceProviders.forEach(function(provider) {
+            var marker = new ol.Feature({
+                geometry: new ol.geom.Point(ol.proj.fromLonLat(provider.coordinates)),
+                name: provider.name
+            });
+
+            marker.setStyle(new ol.style.Style({
+                image: new ol.style.Icon({
+                    anchor: [0.5, 1],
+                    scale: 0.8,
+                    src: 'https://cdn-icons-png.flaticon.com/32/149/149059.png'  // Map pin icon
+                }),
+                text: new ol.style.Text({
+                    text: provider.name,
+                    offsetY: -25,
+                    font: '12px Arial',
+                    fill: new ol.style.Fill({ color: 'black' }),
+                    stroke: new ol.style.Stroke({ color: 'white', width: 2 })
+                })
+            }));
+
+            vectorSource.addFeature(marker);
+            ol.extent.extend(extent, marker.getGeometry().getExtent());
+        });
+
+        // Add marker for the customer location
+        var customerLocation = [{{ customer_location.longitude }}, {{ customer_location.latitude }}];
+        var customerMarker = new ol.Feature({
+            geometry: new ol.geom.Point(ol.proj.fromLonLat(customerLocation)),
+            name: "You"
+        });
+
+        customerMarker.setStyle(new ol.style.Style({
+            image: new ol.style.Icon({
+                anchor: [0.5, 1],
+                scale: 0.8,
+                src: 'https://cdn-icons-png.flaticon.com/32/149/149060.png'  // Different icon for customer
+            }),
+            text: new ol.style.Text({
+                text: "You",
+                offsetY: -25,
+                font: '12px Arial',
+                fill: new ol.style.Fill({ color: 'blue' }),
+                stroke: new ol.style.Stroke({ color: 'white', width: 2 })
+            })
+        }));
+
+        vectorSource.addFeature(customerMarker);
+        ol.extent.extend(extent, customerMarker.getGeometry().getExtent());
+
+        var markerLayer = new ol.layer.Vector({
+            source: vectorSource
+        });
+        map.addLayer(markerLayer);
+
+        // Adjust map view to fit all service providers and customer location
+        if (serviceProviders.length > 0) {
+            map.getView().fit(extent, {
+                padding: [50, 50, 50, 50],
+                maxZoom: 14,
+                duration: 1000
+            });
+        }
+
+        // Popup on marker click
+        map.on('click', function(event) {
+            map.forEachFeatureAtPixel(event.pixel, function(feature) {
+                alert('Service Provider: ' + feature.get('name'));
+            });
+        });
+    </script>
+{% endblock %}
