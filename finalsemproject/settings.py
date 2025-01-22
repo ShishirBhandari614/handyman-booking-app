@@ -47,6 +47,7 @@ EXTERNAL_APPS = [
     'userauth',
     'kycverification',
     'location',
+    'SMS',
 
 ]
 
@@ -156,3 +157,7 @@ REST_FRAMEWORK = {
 
 AUTH_USER_MODEL = "userauth.User"
 ACCOUNT_UNIQUE_EMAIL = True
+
+INFOBIP_API_BASE_URL = "https://ypxmgp.api.infobip.com"
+INFOBIP_API_KEY = "b844945bcc4803c7be8b908bd3037d58-5f3a4ccf-28a4-44fc-8530-6e997787ad90"
+INFOBIP_SENDER_ID = "ServiceSMS"  # Your sender ID

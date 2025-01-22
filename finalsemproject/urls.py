@@ -26,6 +26,7 @@ urlpatterns = [
     path('', include('kycverification.urls')),
     path('', include('location.urls')),
     path('', include('dijkastras.urls')),
+    path('', include('SMS.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
