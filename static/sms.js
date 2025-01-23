@@ -4,18 +4,23 @@ document.addEventListener("DOMContentLoaded", function () {
             event.preventDefault();
             let userId = this.getAttribute("data-id");
             let phoneNumber = this.getAttribute("data-phone");
+
+            console.log("User ID:", userId);
+            console.log("Phone Number:", phoneNumber);
+
             function getCSRFToken() {
-                // If CSRF token is set in a meta tag:
                 let token = document.querySelector('meta[name="csrf-token"]');
                 if (token) {
                     return token.getAttribute('content');
                 }
-            
-                // Or get it from the cookie
-                return getCookie('csrftoken');
+                return document.cookie.split('; ')
+                    .find(row => row.startsWith('csrftoken='))
+                    ?.split('=')[1];
             }
+
             const csrfToken = getCSRFToken();
-            console.log(csrfToken)
+            console.log("CSRF Token:", csrfToken);
+
             fetch("/book/", {
                 method: "POST",
                 headers: {
@@ -26,27 +31,20 @@ document.addEventListener("DOMContentLoaded", function () {
                     user_id: userId,
                     phone: phoneNumber
                 })
-                
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not OK');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log("Response data:", data);  // Debugging log
-
-                if (data.success) {
-                    alert("Booking successful! SMS Status: " + data.message);
+            .then(response => response.json())  // Parse JSON response
+            .then(result => {
+                console.log("Full response:", result);  // Debugging log
+                if (result.success) {  // Check for success key
+                    alert("Booking successful! SMS Status: " + (result.message || "No message provided"));
                 } else {
-                    alert("Booking failed: " + (data.error || "Unknown error"));
+                    alert("Booking failed: " + (result.message || "Unknown error"));
                 }
             })
             .catch(error => {
-                console.error("Error:", error);
+                console.error("Fetch error:", error);
                 alert("An error occurred while processing your request.");
-            });
+            });                       
         });
     });
 });

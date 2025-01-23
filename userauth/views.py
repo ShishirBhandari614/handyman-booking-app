@@ -21,30 +21,6 @@ from django.views import View
 from django.http import HttpResponseForbidden
 from kycverification.models import KYC
 from location.models import ServiceProviderLocation
-   
-# class ServiceProviderSignupView(APIView):
-#     permission_classes = [AllowAny]
-#     def get(self, request):
-#         return render(request, 'serviceprovider.html')
-#     def post(self, request):
-#         serializer = ServiceProviderSignupSerializer(data=request.data)
-#         if serializer.is_valid():
-#             user = serializer.save()
-#             return Response({'message': 'User registered successfully.'}, status=status.HTTP_201_CREATED)
-#         else:
-#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-# class CustomerSignupView(APIView):
-#     permission_classes = [AllowAny]
-#     def get(self, request):
-#         return render(request, 'customer.html')
-#     def post(self, request):
-#         serializer = CustomerSignupSerializer(data=request.data)
-#         if serializer.is_valid():
-#             user = serializer.save()
-#             return Response({'message': 'User registered successfully.'}, status=status.HTTP_201_CREATED)
-#         else:
-#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class CustomerAuthenticationView(APIView):
     permission_classes = [AllowAny]
@@ -200,25 +176,7 @@ def dashboard_view(request):
         return HttpResponseForbidden("Access Denied: You do not have access to any dashboard.")
     
     
-# class LogoutAPIView(APIView):
-#    permission_classes = [AllowAny]
-#    def post(self, request):
-#         username = request.data.get('username')
-#         password = request.data.get('password')
-#         if not(username and password):
-#             return Response({'detail':'Username and password are required.'}, status=status.HTTP_400_BAD_REQUEST)
-#         user = authenticate(username=username, password=password)
-#         if user is not None:
-#             logout(request)
-#             try:
-#                 token = Token.objects.get(user=user)
-#                 token.delete()
-#                 # return Response({'detail': 'Successfully logged out.'})
-#                 return redirect(reverse('core:index'))
-#             except Token.DoesNotExist:
-#                 return Response({'detail': 'Token does not exist.'}, status=status.HTTP_404_NOT_FOUND)
-#         else:
-#          return Response({'detail': 'Invalid username or password.'}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class LogoutAPIView(APIView):
     permission_classes = [IsAuthenticated]
