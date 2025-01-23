@@ -1,4 +1,4 @@
 pip install django
-pip install django-restframework
+pip install djangorestframework
 pip install pillow
 pip install requests
