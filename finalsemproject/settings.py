@@ -48,6 +48,7 @@ EXTERNAL_APPS = [
     'kycverification',
     'location',
     'SMS',
+    'ratings'
 
 ]
 

@@ -22,7 +22,10 @@
                 {{ provider.service_provider.phone }} 
                 <a href="#" class="btn btn-primary book-now" 
                     data-id="{{ provider.service_provider.user.id }}" 
-                    data-phone="{{ provider.service_provider.phone }}">
+                    data-phone="{{ provider.service_provider.phone }}"
+                    customerid="{{customer.user.id}}" 
+                    customername="{{customer.user.username}}" 
+                    customerphone="{{ customer.user.phone }}">
                     Book Now
                 </a>
             </li>
