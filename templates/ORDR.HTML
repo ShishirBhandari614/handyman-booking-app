@@ -12,7 +12,7 @@
             margin: 0;
             padding: 0;
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #512da8, #673ab7);
+            background: transparent;
             color: #fff;
             display: flex;
             flex-direction: column;
@@ -26,14 +26,16 @@
             background: #fff;
             color: #333;
             width: 90%;
-            max-width: 500px;
+            max-width: 400px; /* Corrected typo from '40opx' to '400px' */
             border-radius: 10px;
             box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
             padding: 20px;
             text-align: center;
             z-index: 10;
             animation: fadeIn 0.5s ease;
+            margin-top: -30px; /* Move the container 30px upwards */
         }
+        
 
         .tracking-container h2 {
             margin-bottom: 20px;
@@ -161,7 +163,7 @@
             right: -150px;
             width: 150px;
             height: auto;
-            animation: bikeMove 5s linear infinite;
+            animation: bikeMove 20s linear infinite;
         }
 
         @keyframes bikeMove {
@@ -193,7 +195,7 @@
 
     <!-- Road and Bike Animation -->
     <div class="road-container">
-        <img src="{% static 'images/bike.svg' %}" alt="Bike" class="bike">
+        <img src="{% static 'images/BHANDARII.svg' %}" alt="Bike" class="bike">
         <div class="road">
             <div class="dashed-lines">
                 <span></span>
