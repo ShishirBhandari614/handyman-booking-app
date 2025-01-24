@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
+    var serviceType = document.getElementById('service-type').value;
     document.querySelectorAll(".book-now").forEach(button => {
         button.addEventListener("click", function (event) {
             event.preventDefault();
@@ -14,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log("customerId:", customerId)
             console.log("customerphone:", customerPhone)
             console.log("customername:", customername)
-
+            console.log('Service Type:', serviceType);
             function getCSRFToken() {
                 let token = document.querySelector('meta[name="csrf-token"]');
                 if (token) {
@@ -39,7 +40,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     phone: phoneNumber,
                     customer_id: customerId,
                     customer_phone: customerPhone,
-                    customer_name:customername
+                    customer_name:customername,
+                    serviceType:serviceType
                 })
             })
             .then(response => response.json())  // Parse JSON response
@@ -47,6 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.log("Full response:", result);  // Debugging log
                 if (result.success) {  // Check for success key
                     alert("Booking successful! SMS Status: " + (result.message || "No message provided"));
+                    window.location.href = /viewprofile/;
                 } else {
                     alert("Booking failed: " + (result.message || "Unknown error"));
                 }

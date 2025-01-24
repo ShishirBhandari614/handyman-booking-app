@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details | HandiQ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    {% load static %}
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: transparent;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .tracking-container {
+            background: #fff;
+            color: #333;
+            width: 90%;
+            max-width: 400px; /* Corrected typo from '40opx' to '400px' */
+            border-radius: 10px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            text-align: center;
+            z-index: 10;
+            animation: fadeIn 0.5s ease;
+            margin-top: -30px; /* Move the container 30px upwards */
+        }
+        
+
+        .tracking-container h2 {
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            color: #512da8;
+        }
+
+        .tracking-steps {
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .tracking-steps ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tracking-steps ul li {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f1f1f1;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .tracking-steps ul li i {
+            color: #4caf50;
+            margin-right: 10px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .buttons button {
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .cancel-button {
+            background: #e53935;
+            color: #fff;
+        }
+
+        .cancel-button:hover {
+            background: #d32f2f;
+        }
+
+        .complete-button {
+            background: #4caf50;
+            color: #fff;
+        }
+
+        .complete-button:hover {
+            background: #388e3c;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .road-container {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 200px;
+            background: #444;
+            overflow: hidden;
+        }
+
+        .road {
+            position: absolute;
+            width: 100%;
+            height: 50px;
+            bottom: 20px;
+            background: #333;
+            border-top: 5px solid #fff;
+            border-bottom: 5px solid #fff;
+        }
+
+        .dashed-lines {
+            position: absolute;
+            width: 100%;
+            height: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .dashed-lines span {
+            width: 40px;
+            height: 5px;
+            background: #fff;
+            margin: 0 10px;
+            animation: dashMove 2s linear infinite;
+        }
+
+        @keyframes dashMove {
+            from {
+                transform: translateX(0);
+            }
+            to {
+                transform: translateX(-100%);
+            }
+        }
+
+        .bike {
+            position: absolute;
+            bottom: 70px;
+            right: -150px;
+            width: 150px;
+            height: auto;
+            animation: bikeMove 20s linear infinite;
+        }
+
+        @keyframes bikeMove {
+            from {
+                right: -200px;
+            }
+            to {
+                right: 110%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="tracking-container">
+        <button class="cancel-button" onclick="cancelOrder()">Cancel</button>
+        <h2>Order Details</h2>
+        <div class="tracking-steps">
+            <ul>
+                <li><i class="fas fa-check-circle"></i> Order Received</li>
+                <li><i class="fas fa-check-circle"></i> Provider On the Way</li>
+                <li><i class="fas fa-check-circle"></i> Provider Arrived</li>
+            </ul>
+        </div>
+        <div class="buttons">
+            <button class="complete-button" onclick="completeOrder()">Order Completed</button>
+        </div>
+    </div>
+
+    <!-- Road and Bike Animation -->
+    <div class="road-container">
+        <img src="{% static 'images/BHANDARII.svg' %}" alt="Bike" class="bike">
+        <div class="road">
+            <div class="dashed-lines">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function cancelOrder() {
+            if (confirm("Are you sure you want to cancel this order?")) {
+                // Redirect to cancellation or dashboard page
+                window.location.href = "/customerdashboard/";
+            }
+        }
+
+        function completeOrder() {
+            alert("Order marked as completed! Thank you for using HandiQ.");
+            // Redirect to feedback or dashboard page
+            window.location.href = "/dashboard";
+        }
+    </script>
+</body>
+
+</html>

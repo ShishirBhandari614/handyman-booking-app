@@ -27,6 +27,7 @@ urlpatterns = [
     path('', include('location.urls')),
     path('', include('dijkastras.urls')),
     path('', include('SMS.urls')),
+    path('', include('ratings.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

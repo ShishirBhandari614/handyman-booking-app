@@ -10,7 +10,7 @@ class Booking(models.Model):
     # Other booking-related fields...
     
     def __str__(self):
-        return f"Booking {self.id} for {self.customer.username}"
+        return f"Booking {self.id} for {self.customer.user.username}"
 
 class Rating(models.Model):
     booking = models.OneToOneField(Booking, on_delete=models.CASCADE)
