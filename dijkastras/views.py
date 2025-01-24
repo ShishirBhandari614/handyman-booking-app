@@ -61,6 +61,9 @@ def dijkstra_algorithm(customer_location, service_providers):
 def search_service_providers(request):
     service_type = request.GET.get('service_type')
     customer = request.user.customer
+    print(customer.user.id)
+    print(customer)
+
     customer_location = CustomerLocation.objects.get(customer=customer)
 
     # Fetch verified and online service providers of requested type
@@ -75,7 +78,8 @@ def search_service_providers(request):
     context = {
         'customer_location': customer_location,
         'service_providers': [provider[0] for provider in sorted_providers[:5]],  # Get top 5 nearest
-        'service_type': service_type
+        'service_type': service_type,
+        'customer':customer
     }
     print(service_providers)
     return render(request, 'search_results.html', context)

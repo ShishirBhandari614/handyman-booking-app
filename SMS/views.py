@@ -5,7 +5,7 @@ from userauth.models import ServiceProvider, Customer
 from SMS.utils import send_sms
 import json
 
- # Temporary for debugging; ensure CSRF tokens are used in production
+# Temporary for debugging; ensure CSRF tokens are used in production
 def book_service(request):
     if request.method == "POST":
         try:
@@ -24,13 +24,15 @@ def book_service(request):
             service_provider = get_object_or_404(ServiceProvider, user__id=user_id)
             print(f"Service Provider: {service_provider.user.kyc.name}")
 
-            # Get the customer
-            # customer = get_object_or_404(Customer, user=request.user)
-            # customer_phone = customer.phone
-            # print(f"Customer phone: {customer_phone}")
+            # Get the customer details
+            customer = get_object_or_404(Customer, user__id=request.user.id)  # Assuming request.user is the customer
+            customer_name = customer.user.username  # Assuming username is used as customer's name
+            customer_phone = customer.phone
 
-            # Create the SMS message
-            message = f"Dear {service_provider.user.kyc.name}, you have a new service booking request from customer!"
+            # Create the SMS message with customer details
+            message = (f"Dear {service_provider.user.kyc.name}, "
+                       f"You have a new service booking request from {customer_name} "
+                       f"(Phone: {customer_phone}).")
 
             # Send SMS
             sms_response = send_sms(phone_number, message)

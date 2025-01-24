@@ -4,9 +4,16 @@ document.addEventListener("DOMContentLoaded", function () {
             event.preventDefault();
             let userId = this.getAttribute("data-id");
             let phoneNumber = this.getAttribute("data-phone");
+            let customerId = this.getAttribute("customerid");
+            let customername=this.getAttribute("customername");
+            let customerPhone = this.getAttribute("customerphone");
+
 
             console.log("User ID:", userId);
             console.log("Phone Number:", phoneNumber);
+            console.log("customerId:", customerId)
+            console.log("customerphone:", customerPhone)
+            console.log("customername:", customername)
 
             function getCSRFToken() {
                 let token = document.querySelector('meta[name="csrf-token"]');
@@ -29,7 +36,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 },
                 body: JSON.stringify({
                     user_id: userId,
-                    phone: phoneNumber
+                    phone: phoneNumber,
+                    customer_id: customerId,
+                    customer_phone: customerPhone,
+                    customer_name:customername
                 })
             })
             .then(response => response.json())  // Parse JSON response
