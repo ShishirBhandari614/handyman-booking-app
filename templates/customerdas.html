@@ -82,6 +82,94 @@
                 display: none;
             }
         }
+
+        /* Popup container */
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Popup content */
+        .popup-content {
+            background: linear-gradient(135deg, #512da8, #673ab7);
+            color: #fff;
+            padding: 20px 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+            transform: scale(0.5);
+            animation: popup-show 0.5s ease forwards;
+        }
+
+        .popup-content i {
+            font-size: 50px;
+            color: #4caf50;
+            margin-bottom: 10px;
+            animation: bounce 1s infinite;
+        }
+
+        .popup-content h2 {
+            font-size: 1.8rem;
+            margin: 10px 0;
+        }
+
+        .popup-content p {
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .popup-content button {
+            background: #4caf50;
+            border: none;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .popup-content button:hover {
+            background: #388e3c;
+        }
+
+        /* Show popup */
+        .popup.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* Animations */
+        @keyframes popup-show {
+            from {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
     </style>
 </head>
 
@@ -97,7 +185,7 @@
         </div>
         <div class="menu" id="menu">
             <ul>
-                <li><a href="/view-profile/">View Profile</a></li>
+                <li><a href="ORDR.HTML">Order Details</a></li>
                 <li><a href="#" id="logout-btn">Logout</a></li>
             </ul>
         </div>
@@ -107,7 +195,6 @@
         <h1>Welcome to HandiQ</h1>
         <p>Find exactly what you need</p>
         <div class="search-bar">
-
             <form action="{% url 'search_service_providers' %}" method="get">
                 <input type="text" id="search-input" name="service_type" list="services" placeholder="What are you looking for?" autocomplete="off">
                 <datalist id="services">
@@ -117,15 +204,17 @@
                     <option value="Plumber">
                 </datalist>
                 <button type="submit"><i class="fas fa-search"></i> Search</button>
-</form>
+            </form>
         </div>
     </div>
 
-    <div id="logoutModal" class="modal">
-        <div class="modal-content">
-            <p>Are you sure you want to log out?</p>
-            <button id="confirmLogout">Yes</button>
-            <button id="cancelLogout">No</button>
+    <!-- Booking Confirmation Popup -->
+    <div id="bookingConfirmation" class="popup hidden">
+        <div class="popup-content">
+            <i class="fas fa-check-circle"></i>
+            <h2>Booking Confirmed!</h2>
+            <p>Your service provider will contact you soon.</p>
+           <a href="ORDR.HTML"><button id="closePopup">Close</button></a>
         </div>
     </div>
 
@@ -144,6 +233,23 @@
         document.getElementById('cancelLogout').addEventListener('click', function() {
             document.getElementById('logoutModal').style.display = 'none';
         });
+
+        // Simulate booking confirmation
+        function showBookingConfirmation() {
+            const popup = document.getElementById('bookingConfirmation');
+            popup.classList.add('show');
+            setTimeout(() => {
+                popup.classList.remove('show');
+            }, 3000); // Auto-close after 3 seconds
+        }
+
+        document.getElementById('closePopup').addEventListener('click', function() {
+            const popup = document.getElementById('bookingConfirmation');
+            popup.classList.remove('show');
+        });
+
+        // Example: Call this function when booking is successful
+        // showBookingConfirmation();
     </script>
 </body>
 
