@@ -11,12 +11,14 @@
     <title>Welcome | HandiQ</title>
     <style>
         body {
-            background: url("{% static 'images/carpenter.svg' %}");
+            background: url("{% static 'images/carpenter.svg' %}") no-repeat center center fixed;
+            background-size: cover;
             font-family: 'Arial', sans-serif;
             height: 100vh;
             display: flex;
             flex-direction: column;
             color: #fff;
+            margin: 0;
         }
 
         .navbar {
@@ -40,27 +42,18 @@
         }
 
         .menu {
-            display: none;
-            position: absolute;
-            top: 60px;
-            right: 20px;
-            background-color: #333;
-            border-radius: 5px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .menu.active {
-            display: block;
+            display: flex;
         }
 
         .menu ul {
             list-style: none;
             padding: 10px;
             margin: 0;
+            display: flex;
         }
 
         .menu ul li {
-            margin: 10px 0;
+            margin: 0 10px;
         }
 
         .menu ul li a {
@@ -78,97 +71,68 @@
                 display: flex;
             }
 
-            .profile-dropdown {
+            .menu {
                 display: none;
+                position: absolute;
+                top: 60px;
+                right: 20px;
+                background-color: #333;
+                border-radius: 5px;
+                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            .menu.active {
+                display: flex;
+            }
+
+            .menu ul {
+                flex-direction: column;
+                padding: 0;
+            }
+
+            .menu ul li {
+                margin: 10px 0;
             }
         }
 
-        /* Popup container */
-        .popup {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
+        .welcome-container {
+            text-align: center;
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+
+        .search-bar {
+            margin-top: 20px;
+        }
+
+        .search-bar form {
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
         }
 
-        /* Popup content */
-        .popup-content {
-            background: linear-gradient(135deg, #512da8, #673ab7);
-            color: #fff;
-            padding: 20px 30px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
-            transform: scale(0.5);
-            animation: popup-show 0.5s ease forwards;
-        }
-
-        .popup-content i {
-            font-size: 50px;
-            color: #4caf50;
-            margin-bottom: 10px;
-            animation: bounce 1s infinite;
-        }
-
-        .popup-content h2 {
-            font-size: 1.8rem;
-            margin: 10px 0;
-        }
-
-        .popup-content p {
-            font-size: 1rem;
-            margin-bottom: 15px;
-        }
-
-        .popup-content button {
-            background: #4caf50;
+        .search-bar input {
+            padding: 10px;
+            border-radius: 5px;
             border: none;
+            width: 300px;
+            margin-right: 10px;
+        }
+
+        .search-bar button {
+            background-color: #512da8;
             color: #fff;
             padding: 10px 20px;
+            border: none;
             border-radius: 5px;
-            font-size: 1rem;
             cursor: pointer;
-            transition: background 0.3s ease;
+            font-size: 1rem;
         }
 
-        .popup-content button:hover {
-            background: #388e3c;
-        }
-
-        /* Show popup */
-        .popup.show {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        /* Animations */
-        @keyframes popup-show {
-            from {
-                transform: scale(0.5);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        @keyframes bounce {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
+        .search-bar button:hover {
+            background-color: #673ab7;
         }
     </style>
 </head>
@@ -208,48 +172,10 @@
         </div>
     </div>
 
-    <!-- Booking Confirmation Popup -->
-    <div id="bookingConfirmation" class="popup hidden">
-        <div class="popup-content">
-            <i class="fas fa-check-circle"></i>
-            <h2>Booking Confirmed!</h2>
-            <p>Your service provider will contact you soon.</p>
-           <a href="ORDR.HTML"><button id="closePopup">Close</button></a>
-        </div>
-    </div>
-
-    <script src="{% static 'customerdas.js' %}"></script>
-    <script src="{% static 'logout.js' %}"></script>
-    <script src="{% static 'customerlocation.js' %}"></script>
     <script>
         document.getElementById('hamburger-menu').addEventListener('click', function() {
             document.getElementById('menu').classList.toggle('active');
         });
-
-        document.getElementById('logout-btn').addEventListener('click', function() {
-            document.getElementById('logoutModal').style.display = 'block';
-        });
-
-        document.getElementById('cancelLogout').addEventListener('click', function() {
-            document.getElementById('logoutModal').style.display = 'none';
-        });
-
-        // Simulate booking confirmation
-        function showBookingConfirmation() {
-            const popup = document.getElementById('bookingConfirmation');
-            popup.classList.add('show');
-            setTimeout(() => {
-                popup.classList.remove('show');
-            }, 3000); // Auto-close after 3 seconds
-        }
-
-        document.getElementById('closePopup').addEventListener('click', function() {
-            const popup = document.getElementById('bookingConfirmation');
-            popup.classList.remove('show');
-        });
-
-        // Example: Call this function when booking is successful
-        // showBookingConfirmation();
     </script>
 </body>
 

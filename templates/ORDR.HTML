@@ -8,12 +8,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     {% load static %}
     <style>
+        /* Base Styling */
         body {
             margin: 0;
             padding: 0;
             font-family: 'Arial', sans-serif;
-            background: transparent;
-            color: #fff;
+            background: #f3f4f6;
+            color: #333;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -26,16 +27,15 @@
             background: #fff;
             color: #333;
             width: 90%;
-            max-width: 400px; /* Corrected typo from '40opx' to '400px' */
+            max-width: 400px;
             border-radius: 10px;
             box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
             padding: 20px;
             text-align: center;
             z-index: 10;
             animation: fadeIn 0.5s ease;
-            margin-top: -30px; /* Move the container 30px upwards */
+            margin-top: -30px;
         }
-        
 
         .tracking-container h2 {
             margin-bottom: 20px;
@@ -43,28 +43,24 @@
             color: #512da8;
         }
 
-        .tracking-steps {
-            margin: 20px 0;
+        .profile-picture {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 10px auto;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .details {
             text-align: left;
+            margin-top: 10px;
         }
 
-        .tracking-steps ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .tracking-steps ul li {
-            margin-bottom: 15px;
-            padding: 10px;
-            background: #f1f1f1;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-        }
-
-        .tracking-steps ul li i {
-            color: #4caf50;
-            margin-right: 10px;
+        .details p {
+            margin: 5px 0;
+            font-size: 0.9rem;
+            color: #555;
         }
 
         .buttons {
@@ -100,17 +96,7 @@
             background: #388e3c;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
+        /* Bike Ride Animation */
         .road-container {
             position: absolute;
             bottom: 0;
@@ -148,82 +134,234 @@
             animation: dashMove 2s linear infinite;
         }
 
+        .bike {
+            position: absolute;
+            bottom: 70px;
+            right: -200px;
+            width: 150px;
+            height: auto;
+            animation: bikeMove 10s linear infinite;
+        }
+
         @keyframes dashMove {
             from {
                 transform: translateX(0);
             }
+
             to {
                 transform: translateX(-100%);
             }
         }
 
-        .bike {
-            position: absolute;
-            bottom: 70px;
-            right: -150px;
-            width: 150px;
-            height: auto;
-            animation: bikeMove 20s linear infinite;
-        }
-
         @keyframes bikeMove {
-            from {
+            0% {
                 right: -200px;
             }
-            to {
+
+            100% {
                 right: 110%;
+            }
+        }
+
+        /* Modal Styling */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .modal-content {
+            background: #fff;
+            color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            animation: slideIn 0.5s ease;
+            position: relative;
+        }
+
+        .modal-content textarea {
+            width: 100%;
+            height: 80px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            font-size: 1rem;
+        }
+
+        .modal-content button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #512da8;
+            color: #fff;
+            transition: background 0.3s ease;
+        }
+
+        .modal-content button:hover {
+            background-color: #402396;
+        }
+
+        .rating-stars {
+            margin: 10px 0;
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .rating-stars i {
+            font-size: 1.5rem;
+            color: #ccc;
+            cursor: pointer;
+        }
+
+        .rating-stars i.selected {
+            color: #ffc107;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
             }
         }
     </style>
 </head>
 
 <body>
+    <!-- Tracking Container -->
     <div class="tracking-container">
-        <button class="cancel-button" onclick="cancelOrder()">Cancel</button>
         <h2>Order Details</h2>
-        <div class="tracking-steps">
-            <ul>
-                <li><i class="fas fa-check-circle"></i> Order Received</li>
-                <li><i class="fas fa-check-circle"></i> Provider On the Way</li>
-                <li><i class="fas fa-check-circle"></i> Provider Arrived</li>
-            </ul>
+        <img src="{{ service_provider.profile_picture.url }}" alt="Profile Picture" class="profile-picture">
+        <div class="details">
+            <p><strong>Service Provider:</strong> {{ service_provider.name }}</p>
+            <p><strong>Service Type:</strong> {{ service_provider.service_type }}</p>
+            <p><strong>Booking Date:</strong> {{ booking.date }}</p>
         </div>
         <div class="buttons">
-            <button class="complete-button" onclick="completeOrder()">Order Completed</button>
+            <button class="cancel-button" onclick="showCancelModal()">Cancel</button>
+            <button class="complete-button" onclick="showOrderCompleteMessage()">Order Completed</button>
         </div>
     </div>
 
     <!-- Road and Bike Animation -->
     <div class="road-container">
-        <img src="{% static 'images/BHANDARII.svg' %}" alt="Bike" class="bike">
         <div class="road">
             <div class="dashed-lines">
                 <span></span>
                 <span></span>
                 <span></span>
                 <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
             </div>
+        </div>
+        <img src='{%static "images/BHANDARII.svg"%}' alt="Bike" class="bike">
+    </div>
+
+    <!-- Rating Modal -->
+    <div class="modal" id="ratingModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeRatingModal()">×</span>
+            <h3>Rate Your Experience</h3>
+            <div class="rating-stars" id="starsContainer">
+                <i class="fa fa-star" data-value="1"></i>
+                <i class="fa fa-star" data-value="2"></i>
+                <i class="fa fa-star" data-value="3"></i>
+                <i class="fa fa-star" data-value="4"></i>
+                <i class="fa fa-star" data-value="5"></i>
+            </div>
+            <button onclick="submitRating()">Submit Rating</button>
+        </div>
+    </div>
+
+    <!-- Cancel Modal -->
+    <div class="modal" id="cancelModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeCancelModal()">×</span>
+            <h3>Reason for Cancellation</h3>
+            <textarea id="cancelReason" placeholder="Please provide a reason..."></textarea>
+            <button onclick="submitCancelReason()">Submit</button>
         </div>
     </div>
 
     <script>
-        function cancelOrder() {
-            if (confirm("Are you sure you want to cancel this order?")) {
-                // Redirect to cancellation or dashboard page
-                window.location.href = "/customerdashboard/";
-            }
+        function showOrderCompleteMessage() {
+            alert('Order completed!');
+            setTimeout(() => {
+                document.getElementById('ratingModal').style.display = 'flex';
+            }, 1000);
         }
 
-        function completeOrder() {
-            alert("Order marked as completed! Thank you for using HandiQ.");
-            // Redirect to feedback or dashboard page
-            window.location.href = "/dashboard";
+        function closeRatingModal() {
+            window.location.href = '/customerdashboard/'; // Replace with your dashboard URL
+        }
+
+        function submitRating() {
+            const stars = document.querySelectorAll('.rating-stars i.selected').length;
+            if (stars === 0) {
+                alert('Please select a rating before submitting.');
+                return;
+            }
+
+            alert('Thank you for your feedback! You rated us ' + stars + ' stars.');
+            window.location.href = '/customerdashboard/'; // Replace with your dashboard URL
+        }
+
+        document.getElementById('starsContainer').addEventListener('click', (e) => {
+            if (e.target.classList.contains('fa-star')) {
+                const stars = document.querySelectorAll('.rating-stars i');
+                const rating = parseInt(e.target.getAttribute('data-value'));
+
+                stars.forEach((star, index) => {
+                    star.classList.toggle('selected', index < rating);
+                });
+            }
+        });
+
+        function showCancelModal() {
+            document.getElementById('cancelModal').style.display = 'flex';
+        }
+
+        function closeCancelModal() {
+            document.getElementById('cancelModal').style.display = 'none';
+        }
+
+        function submitCancelReason() {
+            const reason = document.getElementById('cancelReason').value.trim();
+            if (!reason) {
+                alert('Please provide a reason for cancellation.');
+                return;
+            }
+
+            alert('Cancellation submitted. Reason: ' + reason);
+            window.location.href = '/customerdashboard/'; // Replace with your dashboard URL
         }
     </script>
+
 </body>
 
 </html>
