@@ -29,6 +29,7 @@
                 <strong>{{ provider.service_provider.user.kyc.name }}</strong> - 
                 {{ provider.service_provider.phone }} 
                 <a href="#" class="btn btn-primary book-now" 
+                    type="button"
                     data-id="{{ provider.service_provider.user.id }}" 
                     data-phone="{{ provider.service_provider.phone }}"
                     customerid="{{customer.user.id}}" 
@@ -63,5 +64,6 @@
     
     <script src="{% static 'map.js' %}"></script>
     <script src="{% static 'sms.js' %}"></script>
+    <script src="{% static 'detailssend.js' %}"></script>
 </body>
 </html>
