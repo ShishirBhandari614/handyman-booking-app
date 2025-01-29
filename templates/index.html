@@ -1,397 +1,485 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/> 
-{% load static %}
-<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-<meta name="robots" content="index,follow">
-<title>Homepage - HandiQ - हजुर को समस्या अब हाम्रो जिम्मा </title>
-<meta name="description" content="Fonepay facilitates safe & secure mobile payments by connecting consumers, banks and merchants in an interoperable network.">
-<meta property="og:title" content="fonepay - नगद छोडौ fonepay गरौ">
-<meta property="og:description" content="Fonepay facilitates safe &amp; secure mobile payments by connecting consumers, banks and merchants in an interoperable network.">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HandiQ - Your Handy Service Provider</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'login.css' %}">
+  <style>
+    /* General Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
+    body {
+      font-family: 'Arial', sans-serif;
+      color: white;
+      background-color: #000;
+    }
 
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"HandiQ - ","description":"HandiQ is the platform where you find solutions for all your household problems "}</script>
-<!-- Google Fonts - Open Sans -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<!-- fontawesome css link -->
-<link rel="stylesheet" href="https://fonepay.com/css/fontawesome-all.min.css"/>
-<!-- bootstrap css link -->
-<link rel="stylesheet" href="https://fonepay.com/css/bootstrap.min.css"/>
-<!-- favicon -->
-<link rel="shortcut icon" href="https://fonepay.com/images/xfavicon.png.pagespeed.ic.NuHcRuic90.png" type="image/x-icon"/>
-<!-- swipper css link -->
-<link rel="stylesheet" href="https://fonepay.com/css/swiper.min.css"/>
-<!-- lightcase css links -->
-<link rel="stylesheet" href="https://fonepay.com/css/lightcase.css"/>
-<!-- odometer css link -->
-<link rel="stylesheet" href="https://fonepay.com/css/odometer.css"/>
-<!-- line-awesome-icon css -->
-<link rel="stylesheet" href="https://fonepay.com/css/icomoon.css"/>
-<!-- line-awesome-icon css -->
-<link rel="stylesheet" href="https://fonepay.com/css/line-awesome.min.css"/>
-<!-- animate.css -->
-<link rel="stylesheet" href="https://fonepay.com/css/animate.css"/>
-<!-- aos.css -->
-<link rel="stylesheet" href="https://fonepay.com/css/aos.css"/>
-<!-- nice select css -->
-<link rel="stylesheet" href="https://fonepay.com/css/nice-select.css"/>
-<!-- main style css link -->
-<link rel="stylesheet" href="https://fonepay.com/css/style.css"/>
-<!-- Custom Additions -->
-<link rel="stylesheet" href="https://fonepay.com/css/bg.css"/>
-<link rel="stylesheet" href="https://fonepay.com/css/fonepay.css"/>
-<link rel="stylesheet" href="https://fonepay.com/css/custom.css"/>
-<!-- Custom Additions -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-9LXTY85LHS"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-9LXTY85LHS');</script>    </head>
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo img {
+      height: 50px;
+    }
+
+    .logo-tagline {
+      font-size: 14px;
+      margin-left: 10px;
+      line-height: 1.5;
+      text-align: left;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .hamburger span {
+      width: 30px;
+      height: 3px;
+      background-color: white;
+      border-radius: 2px;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 10px;
+      padding: 10px 20px;
+    }
+
+    .nav-links li {
+      position: relative;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: white;
+      font-size: 16px;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #ff0000;
+    }
+
+    /* Submenu */
+    .submenu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 10px 0;
+      min-width: 150px;
+      text-align: left;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .submenu li {
+      padding: 5px 20px;
+    }
+
+    .submenu li a {
+      color: white;
+      display: block;
+      transition: background 0.3s;
+    }
+
+    .submenu li a:hover {
+      background: #444;
+    }
+
+    .menu-item:hover .submenu {
+      display: block;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        gap: 15px;
+        background: rgba(0, 0, 0, 0.9);
+        position: absolute;
+        top: 70px;
+        right: 20px;
+        width: 200px;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+      }
+
+      .nav-links.visible {
+        display: flex;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+    }
+
+    /* Hero Section */
+    .hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: url("{% static 'images/hero-background.jpg' %}") no-repeat center center/cover;
+    }
+
+    .hero h1 {
+      font-size: 4rem;
+      color: #ff0000;
+    }
+
+    .hero p {
+      font-size: 1.5rem;
+      margin-top: 10px;
+    }
+
+    /* Scroll Indicator */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      animation: bounce 2s infinite;
+    }
+
+    .scroll-indicator span {
+      display: block;
+      width: 30px;
+      height: 30px;
+      border: 2px solid white;
+      border-radius: 50%;
+      margin-bottom: 10px;
+      position: relative;
+    }
+
+    .scroll-indicator span::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 10px;
+      height: 10px;
+      background-color: white;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      animation: dot-bounce 2s infinite;
+    }
+
+    .scroll-indicator p {
+      font-size: 14px;
+      color: white;
+      text-align: center;
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateX(-50%) translateY(0);
+      }
+      50% {
+        transform: translateX(-50%) translateY(-10px);
+      }
+    }
+
+    @keyframes dot-bounce {
+      0%, 100% {
+        transform: translate(-50%, -50%) translateY(0);
+      }
+      50% {
+        transform: translate(-50%, -50%) translateY(10px);
+      }
+    }
+
+    /* Section Below Hero */
+    .service-section {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      text-align: left;
+      padding: 0 40px;
+      background: #fff;
+      color: #000;
+      opacity: 0;
+      animation: fadeUp 1.5s forwards;
+    }
+
+    .service-content {
+      flex: 1;
+      padding: 20px;
+    }
+
+    .service-content h2 {
+      font-size: 3rem;
+      color: #ff0000;
+      opacity: 0;
+      animation: fadeUp 1.5s forwards 0.5s;
+    }
+
+    .service-content p {
+      font-size: 1.2rem;
+      margin-top: 10px;
+      opacity: 0;
+      animation: fadeUp 1.5s forwards 1s;
+    }
+
+    .service-content a {
+      margin-top: 20px;
+      color: #ff0000;
+      text-decoration: none;
+      font-size: 1rem;
+      border-bottom: 2px solid #ff0000;
+      opacity: 0;
+      animation: fadeUp 1.5s forwards 1.5s;
+    }
+
+    .service-image {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .service-image img {
+      max-width: 90%;
+      height: auto;
+      border-radius: 20px;
+      opacity: 0;
+      animation: fadeUp 1.5s forwards 2s;
+    }
+
+    /* Fade-Up Animation */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Footer Styles */
+    .footer {
+      background-color: #f9f9f9;
+      color: #333;
+      padding: 40px 20px;
+    }
+
+    .footer-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-column {
+      flex: 1 1 200px;
+      margin: 10px;
+    }
+
+    .footer-column h4 {
+      font-size: 16px;
+      margin-bottom: 10px;
+      font-weight: bold;
+      color: #000;
+    }
+
+    .footer-column ul {
+      list-style: none;
+    }
+
+    .footer-column ul li {
+      margin-bottom: 5px;
+    }
+
+    .footer-column ul li a {
+      text-decoration: none;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .footer-column ul li a:hover {
+      color: #000;
+    }
+
+    .footer-logo {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .footer-logo img {
+      max-width: 120px;
+    }
+
+    .footer-social {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .footer-social a {
+      text-decoration: none;
+      color: #555;
+      font-size: 20px;
+    }
+
+    .footer-social a:hover {
+      color: #000;
+    }
+
+    .footer-copyright {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="background">
+    <nav class="navbar">
+      <div class="logo">
+        <img src="{% static 'images/logo.svg' %}" alt="HandiQ Logo">
+        <p class="logo-tagline">अब हरेक घर <br>को <br>जिम्मा हाम्रो हातै मा</p>
+      </div>
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <ul class="nav-links" id="nav-links">
+        <li class="menu-item">
+          <a href="/signup/customer/">For Customers</a>
+        </li>
+        <li><a href="/signup/serviceprovider/">For Service-Provider</a></li>
+      </ul>
+    </nav>
+
+    <section class="hero">
+      <h2>Connecting Skills to Solutions</h2>
+      <h1><span class="brand">HandiQ</span></h1>
+      <p>Your Handy Service Provider.</p>
+    </section>
+
+    <div class="scroll-indicator" id="scroll-indicator">
+      <span></span>
+      <p>Scroll Down</p>
+    </div>
+  </div>
+
+  <!-- Service Sections -->
+  <section class="service-section">
+    <div class="service-content">
+      <h2>Our Service</h2>
+      <p>Make digital search for your problem instantly.</p>
+      <a href="#">Learn More</a>
+    </div>
+    <div class="service-image">
+      <img src="{% static 'images/service.svg' %}" alt="Service Illustration">
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-column">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About HandiQ</a></li>
+          <li><a href="#">Board of Directors</a></li>
+          <li><a href="#">Management Team</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>News &amp; Media</h4>
+        <ul>
+          <li><a href="#">Blogs</a></li>
+          <li><a href="#">Notices</a></li>
+          <li><a href="#">Investor Relation</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Terms and Conditions</a></li>
+          <li><a href="#">Fees &amp; Charges</a></li>
+          <li><a href="#">Information Security Policy</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#">Brand Guidelines</a></li>
+          <li><a href="#">Downloads</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">FAQs</a></li>
+          <li><a href="#">Career</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Useful Links</h4>
+        <ul>
+          <li><a href="#">HandiQ Login</a></li>
+          <li><a href="#">Complain Portal</a></li>
+          <li><a href="#">Sign Up</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-logo">
+      <img src="{% static 'images/logo1.svg' %}" alt="HandiQ Logo">
+    </div>
+    <div class="footer-copyright">
+      <p>&copy; 2025 HandiQ. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  
+  <script>
+    // JavaScript for Hamburger Menu Toggle
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('nav-links');
     
-    <body>
-        <!-- Start Header -->
-<header class="header-section two py-lg-3 p-0">
-    <div class="header">
-        <div class="header-bottom-area five">
-            <div class="container custom-container">
-                <div class="header-menu-content">
-                    <nav class="navbar navbar-expand-xl p-0">
-                        <a class="d-lg-flex justify-content-center align-items-center site-logo site-title" href="">
-                            <img class="pe-2" width="150px" src="{% static 'images/logo.svg' %}" alt="site-logo"/>
-                            <p class="logo-tagline ps-2 d-lg-block d-none">अब हरेक घर <br>को <br>जिम्मा हाम्रो हातै मा </p>
-                        </a>
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('visible');
+    });
+  </script>
 
-                        <button class="navbar-toggler d-block d-xl-none ms-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="toggle-bar"></span>
-                        </button>
-
-                        <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-    <ul class="navbar-nav main-menu">
-        <li class="menu_has_children">
-            <a href="javascript:;">For Customers <i class="las la-angle-down"></i></a>
-            <ul class="sub-menu">
-                <li><a href="/signup/customer">Become a Customer</a></li>
-                {% comment %} <li><a href="index.html">Login</a></li> {% endcomment %}
-            
-            </ul>
-        </li>
-
-        <li class="menu_has_children">
-            <a href="javascript:;">For Business <i class="las la-angle-down"></i></a>
-            <ul class="sub-menu">
-                <li><a href="/signup/serviceprovider">Become a Service Provider</a></li>
-                {% comment %} <li><a href="index.html">Login</a></li> {% endcomment %}
-                <li><a href="" target="_blank">Download your QR</a></li>
-            </ul>
-        </li>
-        
-        <li class="menu_has_children">
-            <a href="javascript:;">Contact Us<i class="las la-angle-down"></i></a>
-            <ul class="sub-menu">
-                <li><a href="#">About-Us</a></li>
-                <li><a href="#"> Questions</a></li>
-               
-            </ul>
-        </li>
-        
-
-    </ul>
-</div>                    </nav>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-<!-- End Header -->            
-    <!-- Start Banner -->
-<section class="hero-section banner-section two five" style="background:url('{% static "images/Carpenter.svg" %}') center no-repeat;background-size:cover;background-attachment:fixed;min-height:100vh;display:flex;justify-content:center;align-items:end;padding-bottom:150px;">
-    <div class="hero-text text-center w-100 px-2">
-        <p class="fs-4 text-white" data-aos="fade-up">Connecting Skills to Solutions</p>
-        <h1 class="display-2 fw-600 text-white" data-aos="fade-up" data-aos-delay="400"><span class="text-fonepay">HandiQ</span><br>Your Handy Service Provider.</h1>
-    </div>
-</section>
-<!-- End Banner -->    <hr class="my-0">
-<section class="fp-qr-section bg-white py-lg-0 py-5">
-    <div class="container-fluid">
-        <div class="row justify-content-end align-items-center">
-            <div class="col-lg-5 ps-lg-5 my-lg-0 my-2">
-                <div class="fp-content">
-                    <h2 class="display-3 fw-400" data-aos="fade-up"><span class="fw-600 text-fonepay">Our Service</span></h2>
-                    <p class="fs-5" data-aos="fade-up" data-aos-delay="400">Make digital search for your problem Instantly.</p>
-                    <a class="fonepay-link lead text-decoration-none" href="#" data-aos="fade-up" data-aos-delay="600">
-                        Learn More<i class="fa fa-chevron-right ms-2"></i>
-                    </a>
-                </div>
-            </div>
-
-            <div class="col-lg-6 my-lg-0 my-2">
-                <div class="fp-img" data-aos="fade-in" data-aos-delay="400">
-                    <img class="w-100" src="{% static 'images/search.jpg' %}" alt="Fonepay QR - Hero Image">
-                </div>
-            </div>
-        </div>
-    </div>
-</section><hr class="my-0">
-
-<section class="fp-ibft-section bg-white">
-    <div class="container-fluid">
-        <div class="row align-items-center">
-            <div class="col-lg-6 order-lg-1 order-2 my-lg-0">
-                <div class="fp-img" data-aos="fade-in" data-aos-delay="400">
-                    <img class="w-100" src="{% static 'images/service.svg' %}" alt="Fonepay Direct - Hero Image">
-                </div>
-            </div>
-
-            <div class="col-lg-6 ps-lg-5 order-lg-2 order-1 my-lg-0 my-5">
-                <div class="fp-content">
-                    <h2 class="display-3 fw-400" data-aos="fade-up"><span class="fw-600 text-fonepay">Our</span> Service Provider</h2>
-                    <p class="fs-5" data-aos="fade-up" data-aos-delay="400">We work as a team with the co-ordination of all our team members.</p>
-                    <a class="fonepay-link lead text-decoration-none" href="#" data-aos="fade-up" data-aos-delay="600">
-                        Learn More<i class="fa fa-chevron-right ms-2"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section><hr class="my-0">
-
-<section class="fp-payments-section">
-    <div class="container-fluid">
-        <div class="row align-items-start">
-            <div class="service-one col-lg-6 text-center m-0 px-5 pt-100 pb-0">
-                <div class="fp-content one">
-                    <h2 class="display-4 fw-400" data-aos="fade-up"><span class="fw-600 text-fonepay">Carpenters</span></h2>
-                    <p class="fs-5" data-aos="fade-up" data-aos-delay="400">Works for all your woods .</p>
-                    <a class="fonepay-link lead text-decoration-none" href="https://fonepay.com/customers/fonepay-bills" data-aos="fade-up" data-aos-delay="600">
-                        Learn More<i class="fa fa-chevron-right ms-2"></i>
-                    </a>
-                </div>
-
-                <div class="fp-img one" data-aos="fade-in" data-aos-delay="400">
-                    <img class="mt-5" width="500px" src="{% static 'images/C.svg' %}" alt="Fonepay Bills - Hero Image">
-                </div>
-            </div>
-
-            <div class="service-two col-lg-6 bg-dark text-white text-center m-0 px-5 pt-100 pb-0">
-                <div class="fp-content two">
-                    <h2 class="display-4 fw-400 text-white" data-aos="fade-up"><span class="fw-600 text-fonepay">Plumber</span></h2>
-                    <p class="fs-5" data-aos="fade-up" data-aos-delay="400">You don't want to put your hand on that</p>
-                    <a class="fonepay-link lead text-decoration-none" href="#" data-aos="fade-up" data-aos-delay="600">
-                        Learn More<i class="fa fa-chevron-right ms-2"></i>
-                    </a>
-                </div>
-
-                <div class="fp-img two" data-aos="fade-in" data-aos-delay="400">
-                    <img class="mt-5" width="500px" src="{% static 'images/Plumber.svg' %}" alt="FoneTAG - Hero Image">
-                </div>
-            </div>
-
-            <div class="service-one col-lg-6 order-lg-3 order-4 bg-dark text-center m-0 px-5 pt-100 pb-0">
-                <div class="fp-content one">
-                    <h2 class="display-4 text-white fw-400" data-aos="fade-up"><span class="fw-600 text-fonepay">Electrician</span> </h2>
-                    <p class="fs-5 text-white" data-aos="fade-up" data-aos-delay="400">The Current doesn't differenciate.</p>
-                    <a class="fonepay-link lead text-decoration-none" href="#" data-aos="fade-up" data-aos-delay="600">
-                        Learn More<i class="fa fa-chevron-right ms-2"></i>
-                    </a>
-                </div>
-
-                <div class="fp-img one" data-aos="fade-in" data-aos-delay="400">
-                    <img class="mt-5" width="500px" src="{% static 'images/Electrician.svg' %}" alt="Fonepay App - Hero Image">
-                </div>
-            </div>
-
-            <div class="service-two col-lg-6 order-lg-4 order-3 bg-fonepay text-center m-0 px-5 pt-100 pb-0">
-                <div class="fp-content two">
-                    <h2 class="display-4 text-white fw-400" data-aos="fade-up"><span class="fw-600 text-light">Painter</span></h2>
-                    <p class="fs-5 text-white" data-aos="fade-up" data-aos-delay="400">We can paint together</p>
-                    <a class="fonepay-link text-white lead text-decoration-none" href="#" data-aos="fade-up" data-aos-delay="600">
-                        Learn More<i class="fa fa-chevron-right ms-2"></i>
-                    </a>
-                </div>
-
-                <div class="fp-img two" data-aos="fade-in" data-aos-delay="400">
-                    <img class="mt-5" width="500px" src="{% static 'images/Painter.svg' %}" alt="Fonepay Rewards - Hero Image">
-                </div>
-            </div>
-        </div>
-    </div>
-</section><hr class="my-0">    <section class="blog-section-five py-5">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8 text-center">
-                <div class="section-header">
-                    <div class="fp-content">
-                        <h2 class="display-3 fw-400" data-aos="fade-up"><span class="fw-600 text-fonepay">Recent</span> Updates</h2>
-                        <p class="fs-5" data-aos="fade-up" data-aos-delay="400">Explore some of the latest blog & news featuring fonepay.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-       
-        <!-- Start Footer -->
-<footer class="footer-section five pt-120 pb-20">
-    <div class="container">
-        <div class="row mb-30-none">
-            <div class="col-lg-3 col-md-6 mb-30">
-                <div class="footer-widget mb-3">
-                    <h4 class="title">Company</h4>
-                    <ul class="footer-list">
-                        <li><a href="">About HandiQ</a></li>
-                        <li><a href="">Board of Directors</a></li>
-                        <li><a href="">Management Team</a></li>
-                        
-                    </ul>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 mb-30">
-                <div class="footer-widget">
-                    <h4 class="title">News & Medias</h4>
-                    <ul class="footer-list">
-                        <li><a href="">Blogs</a></li>
-                        <li><a href="">Notices</a></li>
-                        <li><a href="">Investor Relation</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-widget mt-4">
-                    <h4 class="title">Resources</h4>
-                    <ul class="footer-list">
-                        <li><a href="" target="_blank">Brand Guidelines</a></li>
-                        <li><a href="">Downloads</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 mb-30">
-                <div class="footer-widget">
-                    <h4 class="title">Legal</h4>
-                    <ul class="footer-list">
-                        <li><a href="">Terms and Conditions</a></li>
-                        <li><a href="">Fees & Charges</a></li>
-                        <li><a href="">Information Security Policy</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-widget mt-4">
-                    <h4 class="title">Terms of Use</h4>
-                    <ul class="footer-list">
-                        <li><a href=""> Payments</a></li>
-                        <li><a href="">Settlement Options</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-widget mt-4">
-                    <h4 class="title">Privacy Policy</h4>
-                    <ul class="footer-list">
-                        <li><a href="">HandiQ</a></li>
-                        
-                    </ul>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 mb-30">
-                <div class="footer-widget">
-                    <h4 class="title">Support</h4>
-                    <ul class="footer-list">
-                        <li><a href="">Contact Us</a></li>
-                        <li><a href="">FAQs</a></li>
-                        
-                        <li><a href="">Career</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-widget mt-4">
-                    <h4 class="title">Useful Links</h4>
-                    <ul class="footer-list">
-                        <li><a href="" target="_blank">HandiQ Login</a></li>
-                        <li><a href="" target="_blank">Complain Portal</a></li>
-                        <li><a href="" target="_blank">Sign Up</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <hr>
-
-        <div class="row align-items-center text-lg-start text-center">
-            <div class="col-lg-3 col-md-6">
-                <div class="footer-widget">
-                    <div class="footer-logo">
-                        <a class="site-logo site-title" href="">
-                            <img width="150px" src="{% static 'images/Logo1.svg' %}" alt="HandiQ Logo"/>
-                        </a>
-                    </div>
-
-                    <ul class="footer-social two mb-lg-0 mb-4">
-                        <li>
-                            <a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                        </li>
-
-                        <li>
-                            <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
-                        </li>
-
-                        <li>
-                            <a href="#" target="_blank"><i class="fab fa-linkedin"></i></a>
-                        </li>
-
-                        <li>
-                            <a href="#" target="_blank"><i class="fab fa-youtube"></i></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="col-lg-6 col-md-6">
-                <div class="footer-widget">
-                    <div class="copyright-area">
-                        <p class="text-center">Copyright © 2024 <a class="fw-bold text-fonepay" href="#">HandiQ Service Limited</a>. All Rights Reserved.</p>
-                        
-                    </div>
-                </div>
-            </div>
-
-        
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
-<!-- End Footer -->
-
-<!-- Start Scroll-To-Top -->
-<a href="#" class="scrollToTop"><i class="las la-angle-up"></i></a>
-<!-- End Scroll-To-Top -->                <!-- jquery -->
-<script src="https://fonepay.com/js/jquery-3.6.0.min.js"></script>
-<!-- bootstrap js -->
-<script src="https://fonepay.com/js/bootstrap.min.js"></script>
-<!-- swipper js -->
-<script src="https://fonepay.com/js/swiper.min.js"></script>
-<!-- lightcase js-->
-<script src="https://fonepay.com/js/lightcase.js"></script>
-<!-- odometer js -->
-<script src="https://fonepay.com/js/odometer.min.js"></script>
-<!-- viewport js -->
-<script src="https://fonepay.com/js/viewport.jquery.js"></script>
-<!-- aos js file -->
-<script src="https://fonepay.com/js/aos.js"></script>
-<!-- nice select js -->
-<script src="https://fonepay.com/js/jquery.nice-select.js"></script>
-<!-- isotope js -->
-<script src="https://fonepay.com/js/isotope.pkgd.min.js"></script>
-<!-- tweenMax js -->
-<script src="https://fonepay.com/js/TweenMax.min.js"></script>
-<!-- main -->
-<script src="https://fonepay.com/js/main.js"></script>
-<!-- Custom Additions -->
-<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-<script>var swiper=new Swiper(".swiper",{autoplay:{delay:5000,pauseOnMouseEnter:true},spaceBetween:500,loop:true,pagination:{el:'.swiper-pagination',clickable:true}});</script>
-<script type="text/javascript">goToByScroll=(id)=>{$('html,body').animate({scrollTop:$("#"+id).offset().top},'slow');}</script>
-    </body>
+</body>
 </html>

@@ -1,4 +1,6 @@
-#!/Users/samyushgautam/Desktop/git/handyman-booking-app/env/bin/python3.12
+#!/bin/sh
+'''exec' "/Users/samyushgautam/Desktop/new file /env/bin/python3.13" "$0" "$@"
+' '''
 # -*- coding: utf-8 -*-
 import re
 import sys

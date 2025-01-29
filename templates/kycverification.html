@@ -9,57 +9,68 @@
     <link rel="stylesheet" href="{% static 'kyc.css' %}">
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <title>KYC Verification | HandiQ</title>
-    
-       
 </head>
-<div class="kyc-container">
-    <h1>KYC Verification</h1>
-    <input type="hidden" id="submission-flag" value="{% if submitted %}true{% else %}false{% endif %}">
-    <form class="kyc-form" id="kyc-form" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="text" id="kyc-name" name="name" placeholder="Name" required>
-        {% comment %} <input type="tel" id="kyc-number" placeholder="Phone Number" required> {% endcomment %}
-        <input type="text" id="kyc-address" name="address" placeholder="Address" required>
-        <input type="text" id="service_type" name="service_type" placeholder="What service do you want to give?" autocomplete="off" required list="services">
-        <datalist id="services">
-            <option value="Carpenter">Carpenter</option>
-            <option value="Painter">Painter</option>
-            <option value="Electrician">Electrician</option>
-            <option value="Plumber">Plumber</option>
-        </datalist>
 
-        
-        <div class="upload-container">
-            <label for="kyc-photo">Upload Photo</label>
-            <input type="file" id="kyc-photo" name="photo" accept="image/*" required>
-        </div>
+<body>
+    <div class="kyc-container">
+        <h1>KYC Verification</h1>
+        <input type="hidden" id="submission-flag" value="{% if submitted %}true{% else %}false{% endif %}">
+        <form class="kyc-form" id="kyc-form" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="text" id="kyc-name" name="name" placeholder="Name" required>
+            <input type="text" id="kyc-address" name="address" placeholder="Address" required>
+            <input type="text" id="service_type" name="service_type" placeholder="What service do you want to give?" autocomplete="off" required list="services">
+            <datalist id="services">
+                <option value="Carpenter">Carpenter</option>
+                <option value="Painter">Painter</option>
+                <option value="Electrician">Electrician</option>
+                <option value="Plumber">Plumber</option>
+            </datalist>
 
-        <input type="text" id="kyc-citizenship" name="citizenship_number" placeholder="Citizenship Number" required>
-        
-        <div class="upload-container">
-            <label for="kyc-citizenship-photo">Upload Citizenship Photo</label>
-            <input type="file" id="kyc-citizenship-photo" name="citizenship_photo" accept="image/*" required>
-        </div>
-    <div class="upload-container">
-            <label for="Training Certificate">Upload Certificate Photo</label>
-            <input type="file" id="kyc-TrainingCertificate-photo"  name="training_certificate" accept="image/*" required>
-        </div>
-        
-        <button type="submit">Submit</button>
-    </form>
-</div>
+            <!-- New Working Type Field -->
+            <div class="price-container">
+                <label for="working-type"></label>
+                <input type="text" id="working-type" name="working_type" placeholder="Choose working type" list="working-types" required>
+                <datalist id="working-types">
+                    <option value="Hourly - Rs 300">Hourly - Rs 300</option>
+                    <option value="One Time - Rs 1000">One Time - Rs 1000</option>
+                </datalist>
+            </div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const isSubmitted = document.getElementById("submission-flag").value === "true";
-        if (isSubmitted) {
-            alert("KYC form submitted. Wait for the verification. You will be redirected to the dashboard.");
-            window.location.href = "{% url 'userauth:serviceproviderdashboard' %}"; // Redirect to the dashboard
-        }
-    });
-</script>
+            <!-- Photo Upload -->
+            <div class="upload-container">
+                <label for="kyc-photo">Upload Photo</label>
+                <input type="file" id="kyc-photo" name="photo" accept="image/*" required>
+            </div>
 
+            <!-- Citizenship Number -->
+            <input type="text" id="kyc-citizenship" name="citizenship_number" placeholder="Citizenship Number" required>
+
+            <!-- Citizenship Photo Upload -->
+            <div class="upload-container">
+                <label for="kyc-citizenship-photo">Upload Citizenship Photo</label>
+                <input type="file" id="kyc-citizenship-photo" name="citizenship_photo" accept="image/*" required>
+            </div>
+
+            <!-- Training Certificate Upload -->
+            <div class="upload-container">
+                <label for="Training Certificate">Upload Certificate Photo</label>
+                <input type="file" id="kyc-TrainingCertificate-photo" name="training_certificate" accept="image/*" required>
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const isSubmitted = document.getElementById("submission-flag").value === "true";
+            if (isSubmitted) {
+                alert("KYC form submitted. Wait for the verification. You will be redirected to the dashboard.");
+                window.location.href = "{% url 'userauth:serviceproviderdashboard' %}"; // Redirect to the dashboard
+            }
+        });
+    </script>
 </body>
 
 </html>
-

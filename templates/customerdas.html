@@ -8,6 +8,8 @@
     <meta name="csrf-token" content="{{ csrf_token }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="{% static 'customerdas.css' %}?v={{ STATIC_VERSION }}">
+    <link rel="stylesheet" href="{% static 'customerdas1.css' %}?v={{ STATIC_VERSION }}">
+
     <title>Welcome | HandiQ</title>
     <style>
         body {
@@ -19,121 +21,8 @@
             flex-direction: column;
             color: #fff;
             margin: 0;
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-        }
-
-        .hamburger-menu {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-        }
-
-        .hamburger-menu div {
-            width: 25px;
-            height: 3px;
-            background-color: #fff;
-            margin: 4px 0;
-        }
-
-        .menu {
-            display: flex;
-        }
-
-        .menu ul {
-            list-style: none;
-            padding: 10px;
-            margin: 0;
-            display: flex;
-        }
-
-        .menu ul li {
-            margin: 0 10px;
-        }
-
-        .menu ul li a {
-            color: #fff;
-            text-decoration: none;
-            display: block;
-        }
-
-        .menu ul li a:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 768px) {
-            .hamburger-menu {
-                display: flex;
-            }
-
-            .menu {
-                display: none;
-                position: absolute;
-                top: 60px;
-                right: 20px;
-                background-color: #333;
-                border-radius: 5px;
-                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-                flex-direction: column;
-                padding: 10px;
-            }
-
-            .menu.active {
-                display: flex;
-            }
-
-            .menu ul {
-                flex-direction: column;
-                padding: 0;
-            }
-
-            .menu ul li {
-                margin: 10px 0;
-            }
-        }
-
-        .welcome-container {
-            text-align: center;
-            margin-top: auto;
-            margin-bottom: auto;
-        }
-
-        .search-bar {
-            margin-top: 20px;
-        }
-
-        .search-bar form {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .search-bar input {
-            padding: 10px;
-            border-radius: 5px;
-            border: none;
-            width: 300px;
-            margin-right: 10px;
-        }
-
-        .search-bar button {
-            background-color: #512da8;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
-        .search-bar button:hover {
-            background-color: #673ab7;
-        }
+}
+        
     </style>
 </head>
 
@@ -150,7 +39,7 @@
         <div class="menu" id="menu">
             <ul>
                 <li><a href="/viewprofile/">Order Details</a></li>
-                <li><a href="#" id="logout-btn">Logout</a></li>
+                <li><a href="" id="logout-btn">Logout</a></li>
             </ul>
         </div>
     </nav>
@@ -175,6 +64,45 @@
     <script>
         document.getElementById('hamburger-menu').addEventListener('click', function() {
             document.getElementById('menu').classList.toggle('active');
+        });
+
+        // Adding the confirmation popup for logout
+        document.getElementById('logout-btn').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default link action
+
+            // Create a confirmation dialog
+            const confirmationDialog = document.createElement('div');
+            confirmationDialog.style.position = 'fixed';
+            confirmationDialog.style.top = '50%';
+            confirmationDialog.style.left = '50%';
+            confirmationDialog.style.transform = 'translate(-50%, -50%)';
+            confirmationDialog.style.backgroundColor = '#fff';
+            confirmationDialog.style.padding = '20px';
+            confirmationDialog.style.boxShadow = '0px 4px 10px rgba(0, 0, 0, 0.3)';
+            confirmationDialog.style.borderRadius = '10px';
+            confirmationDialog.style.textAlign = 'center';
+            confirmationDialog.style.zIndex = '1000';
+
+            // Content inside the dialog
+            confirmationDialog.innerHTML = `
+                <p style="font-size: 1.2rem; color: #333; margin-bottom: 20px;">Do you want to logout?</p>
+                <button id="confirm-logout" style="background-color: #512da8; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-right: 10px;">Yes</button>
+                <button id="cancel-logout" style="background-color: #f44336; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">No</button>
+            `;
+
+            // Append the dialog to the body
+            document.body.appendChild(confirmationDialog);
+
+            // Add event listeners for the buttons
+            document.getElementById('confirm-logout').addEventListener('click', function() {
+                // Redirect to the sign-in page
+                window.location.href = "/signup/customer/";
+            });
+
+            document.getElementById('cancel-logout').addEventListener('click', function() {
+                // Remove the dialog
+                document.body.removeChild(confirmationDialog);
+            });
         });
     </script>
 </body>
