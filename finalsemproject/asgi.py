@@ -1,16 +1,20 @@
-"""
-ASGI config for finalsemproject project.
+# """
+# ASGI config for finalsemproject project.
 
-It exposes the ASGI callable as a module-level variable named ``application``.
+# It exposes the ASGI callable as a module-level variable named ``application``.
 
-For more information on this file, see
-https://docs.djangoproject.com/en/5.1/howto/deployment/asgi/
-"""
+# For more information on this file, see
+# https://docs.djangoproject.com/en/5.1/howto/deployment/asgi/
+# """
 
-import os
+# import os
+# from django.core.asgi import get_asgi_application
+# from channels.routing import ProtocolTypeRouter, URLRouter
+# from channels.auth import AuthMiddlewareStack
+# from django.urls import path
 
-from django.core.asgi import get_asgi_application
+# from django.core.asgi import get_asgi_application
+# from userauth.models import consumers
+# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'finalsemproject.settings')
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'finalsemproject.settings')
-
-application = get_asgi_application()
+# application = get_asgi_application()

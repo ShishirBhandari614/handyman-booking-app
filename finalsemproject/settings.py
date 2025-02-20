@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
-    # 'corsheaders',
+    
+    'corsheaders',
 
 ]
 EXTERNAL_APPS = [
@@ -53,12 +54,14 @@ EXTERNAL_APPS = [
 ]
 
 INSTALLED_APPS += EXTERNAL_APPS
-#CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000']
+CORS_ALLOW_ALL_ORIGINS = True
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -156,9 +159,23 @@ REST_FRAMEWORK = {
     ],
 }
 
+# ASGI_APPLICATION = "finalsemproject.asgi.application"
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             "hosts": [('127.0.0.1', 6379)],  # Redis server address (default)
+#         },
+#     },
+# }
 AUTH_USER_MODEL = "userauth.User"
 ACCOUNT_UNIQUE_EMAIL = True
+# INFOBIP_API_BASE_URL = "https://ypxmgp.api.infobip.com"
+# INFOBIP_API_KEY = "b844945bcc4803c7be8b908bd3037d58-5f3a4ccf-28a4-44fc-8530-6e997787ad90"
+# INFOBIP_SENDER_ID = "ServiceSMS"  # Your sender ID
 
-INFOBIP_API_BASE_URL = "https://ypxmgp.api.infobip.com"
-INFOBIP_API_KEY = "b844945bcc4803c7be8b908bd3037d58-5f3a4ccf-28a4-44fc-8530-6e997787ad90"
-INFOBIP_SENDER_ID = "ServiceSMS"  # Your sender ID
+import firebase_admin
+from firebase_admin import credentials
+cred = credentials.Certificate(r"finalsemproject\config\serviceAccountKey.json")
+# Path to your Firebase service account key file
+

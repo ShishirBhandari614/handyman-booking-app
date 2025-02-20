@@ -26,8 +26,8 @@
 
                 {% comment %} <input type="text" id="signin-action" placeholder="action" required> {% endcomment %}
                 <input type="text" id="signin-username" placeholder="username" required>
-                <input type="text" id="signin-email" placeholder="Email" required>
-                <input type="text" id="signin-phone" placeholder=" Phone Number" required>
+                <input type="email" id="signin-email" placeholder="Email" required>
+                <input type="tel" id="signin-phone" name="phone_number" placeholder="Phone Number" required pattern="^\d{10,}$" title="Please enter at least 10 digits.">
                 <input type="password" id="signin-password" placeholder="Password" required>
                 <input type="password" id="signup-confpassword" placeholder="confirm password" required>
 

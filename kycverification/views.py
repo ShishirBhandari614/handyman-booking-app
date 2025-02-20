@@ -9,9 +9,11 @@ def kyc_form_view(request):
         return HttpResponseForbidden("You are not authorized to access this page.")
     if request.method == "POST":
         name = request.POST.get("name")
-        address = request.POST.get("address")
+        address = request.POST.get("address") 
         photo = request.FILES.get("photo")
         service_type = request.POST.get("service_type")
+        woork_type = request.POST.get("working_type")
+        print(woork_type)
         
         citizenship_number = request.POST.get("citizenship_number")
         
@@ -23,6 +25,8 @@ def kyc_form_view(request):
         kyc.name = name
         kyc.address = address
         kyc.service_type = service_type
+        kyc.woork_type = woork_type
+        
         kyc.citizenship_number = citizenship_number
         kyc.photo = photo
         kyc.citizenship_photo = citizenship_photo

@@ -6,7 +6,7 @@ def send_sms(phone_number, message):
         if not phone_number.startswith("977"):
             phone_number = "977" + phone_number 
         # Establish HTTPS connection to Infobip API
-        conn = http.client.HTTPSConnection("ypxmgp.api.infobip.com")
+        conn = http.client.HTTPSConnection("m3zxqj.api.infobip.com")
         
         payload = json.dumps({
             "messages": [
@@ -19,7 +19,7 @@ def send_sms(phone_number, message):
         })
         
         headers = {
-            'Authorization': 'App b844945bcc4803c7be8b908bd3037d58-5f3a4ccf-28a4-44fc-8530-6e997787ad90',  # Your API key
+            'Authorization': 'App 22d114024f0bc479c46696e511f75a40-09803f30-c488-4fa6-8777-ba92dd4bacfc',  # Your API key
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         }

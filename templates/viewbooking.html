@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Booking | HandiQ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    {% load static %}
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <link rel="stylesheet" href="{% static 'ORDR.css' %}?v={{ STATIC_VERSION }}">
+</head>
+
+<body>
+    <div class="view-booking-container">
+        <h2>Booking Overview</h2>
+
+        <!-- Button to View Bookings -->
+        <button class="view-booking-button" id="viewBookingBtn" onclick="toggleBookingOptions()">View Booking</button>
+
+        <!-- Booking Options Section -->
+        <div id="bookingOptions" class="booking-options" style="display: none;">
+            <h3>Select Booking Type</h3>
+            <button class="scheduled-booking-button" onclick="viewScheduledBooking()">Scheduled Booking</button>
+            <button class="completed-booking-button" onclick="viewCompletedBooking()">Completed Booking</button>
+        </div>
+    </div>
+
+    <script>
+        // Function to toggle the view for booking options
+        function toggleBookingOptions() {
+            var options = document.getElementById('bookingOptions');
+            options.style.display = options.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Function to redirect to the Scheduled Bookings page
+        function viewScheduledBooking() {
+            window.location.href = '/viewprofile/'; // Replace with your actual URL for scheduled bookings
+        }
+
+        // Function to redirect to the Completed Bookings page
+        function viewCompletedBooking() {
+            window.location.href = '/completed-booking'; // Replace with your actual URL for completed bookings
+        }
+    </script>
+</body>
+
+</html>

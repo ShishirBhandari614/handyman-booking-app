@@ -20,6 +20,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.http import HttpResponseForbidden
 from kycverification.models import KYC
+from django.contrib import messages
 from location.models import ServiceProviderLocation
 
 class CustomerAuthenticationView(APIView):
@@ -162,12 +163,9 @@ class ServiceProviderDashboardView(View):
 
 # Redirect after login based on user type
 def dashboard_view(request):
-    """
-    Redirects the user to the appropriate dashboard based on their role (Customer or Service Provider).
-    """
+    
     user = request.user
 
-    # Check the role of the user and redirect accordingly
     if user.is_customer:
         return redirect('/customerdashboard/')  # Redirect to customer dashboard
     elif user.is_ServiceProvider:
@@ -183,16 +181,14 @@ class LogoutAPIView(APIView):
 
     def post(self, request):
         try:
-            # Retrieve token from request header
-            token = request.auth  # This assumes you are using token authentication
-            print(f'Token received: {token}')  # Debugging log to check the received token
+            token = request.auth  
+            print(f'Token received: {token}')  
             
             # If token exists, delete it
             if token:
                 token.delete()
                 if hasattr(request.user, 'serviceprovider'):
                     service_provider = request.user.serviceprovider
-                    # Reset 'is_online' to False for the service provider
                     ServiceProviderLocation.objects.filter(service_provider=service_provider).update(is_online=False)
                     print(f"Service provider {service_provider.user.username} status set to offline.")
                 logout(request)
@@ -202,3 +198,26 @@ class LogoutAPIView(APIView):
 
         except Exception as e:
             return Response({'message': 'Logout failed. Please try again.', 'error': str(e)}, status=400)
+        
+@login_required
+@csrf_exempt  
+def update_phone_number(request):
+    user = request.user 
+
+    if request.method == 'POST':
+        new_phone = request.POST.get('new_phone') 
+
+        if new_phone and new_phone.isdigit() and len(new_phone) == 10: 
+            user.phone = new_phone
+            user.save()
+
+            if hasattr(user, 'serviceprovider'):
+                user.serviceprovider.phone = new_phone
+                user.serviceprovider.save()
+
+            messages.success(request, 'Phone number updated successfully.')
+            return redirect('/settings/change-phone-number/')  
+        else:
+            messages.error(request, 'Invalid phone number. Please enter a valid 10-digit number.')
+
+    return render(request, 'chngphno.html')

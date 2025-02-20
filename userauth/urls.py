@@ -10,6 +10,7 @@ urlpatterns = [
     path('serviceproviderdashboard/', ServiceProviderDashboardView.as_view(), name= "serviceproviderdashboard"),
     path('customerdashboard/', customerdashboard.as_view(),),
     path('logout/', LogoutAPIView.as_view(), name='logout'),
+    path('settings/change-phone-number/', update_phone_number, name='change_phone_number'),
     # path('login/',LoginAPIView.as_view()),
     
 ]

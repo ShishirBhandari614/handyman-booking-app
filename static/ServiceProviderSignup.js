@@ -11,6 +11,28 @@ document.addEventListener('DOMContentLoaded', () => {
         const phoneNumber = document.getElementById('signin-phone').value;
         const password = document.getElementById('signin-password').value;
         const confirmPassword = document.getElementById('signup-confpassword').value;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phoneRegex = /^\d{10}$/; // Assumes a 10-digit phone number
+
+        if (!emailRegex.test(email)) {
+            alert('Please enter a valid email address.');
+            return;
+        }
+
+        if (!phoneRegex.test(phoneNumber)) {
+            alert('Phone number must be exactly 10 digits.');
+            return;
+        }
+
+        if (password.length < 6) {
+            alert('Password must be at least 6 characters long.');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            alert('Passwords do not match!');
+            return;
+        }
         // const action = 'signup';
         if (password !== confirmPassword) {
             alert('Passwords do not match!');

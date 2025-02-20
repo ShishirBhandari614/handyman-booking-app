@@ -4,64 +4,257 @@
     <meta charset="UTF-8">
     {% load static %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nearest {{ service_type }} Providers</title>
+    <title>Nearest {{ service_type }} </title>
     <meta name="csrf-token" content="{{ csrf_token }}">
 
     <!-- External Styles and Libraries -->
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
     <link rel="stylesheet" href="{% static 'service_ratings.css' %}">
+    <style>/* General styling for the provider list */
+#provider-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
 
-    <script src="https://openlayers.org/en/v6.14.1/build/ol.js"></script>
+/* Styling for each provider item */
+#provider-list li {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin: 10px 0;
+    padding: 15px;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Profile picture styling */
+.profile-picture {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+/* Styling for the provider name and phone */
+#provider-list li strong {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+/* Styling for the status (online or offline) */
+.status {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.status.online {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.status.offline {
+    background-color: #f44336;
+    color: white;
+}
+
+/* Rating and Distance info styling */
+p {
+    margin: 5px 0;
+}
+
+/* Work Type styling */
+#provider-list li p:last-child {
+    font-style: italic;
+}
+
+/* Styling for the "Book Now" button */
+.book-now {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.book-now:hover {
+    background-color: #0056b3;
+}
+
+/* Dynamically expanding the provider box */
+#provider-list li.expanded {
+    max-height: 1000px;  /* Ensures that the box can expand with content */
+    overflow: visible;
+}
+
+</style>
+    <script type="module">
+        // Import Firebase SDK functions
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+        import { getDatabase, ref, onValue, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
+    
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCdzOi1_I5gPmP1uY_CVET30ZoBTCUNc6g",
+            authDomain: "finalsemproject1-83e7e.firebaseapp.com",
+            databaseURL: "https://finalsemproject1-83e7e-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "finalsemproject1-83e7e",
+            storageBucket: "finalsemproject1-83e7e.appspot.com",
+            messagingSenderId: "664568097362",
+            appId: "1:664568097362:web:ba873f9785cc1168ca0d8b",
+            measurementId: "G-EY24Y7XSDR"
+        };
+    
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Fetch service type from hidden input
+        const serviceType = document.getElementById('service-type').value;
+
+        // Function to update the provider list dynamically
+        // Function to update the provider list dynamically
+        function updateProviderList(providerData) {
+            const providerList = document.getElementById('provider-list');
+            let providerItem = document.getElementById(`provider-${providerData.id}`);
+            
+            console.log('Update provider:', providerData);
+        
+            // Limit rating to 2 decimal places
+            const formattedRating = providerData.rating.toFixed(2);
+            
+            // Set a default value for distance if it's not available
+            const providerDistance = providerData.distance || "N/A";  // Default to "N/A" if no distance is available
+            console.log('Distance:', providerData.distance);
+            if (providerData.is_online) {
+                // If provider is online, add or update the list
+                if (!providerItem) {
+                    providerItem = document.createElement('li');
+                    providerItem.id = `provider-${providerData.id}`;
+                    providerList.appendChild(providerItem);
+                }
+        
+                providerItem.innerHTML = `
+                    <img src="${providerData.photo_url}" alt="${providerData.name}'s Profile Picture" class="profile-picture">
+                    <strong>${providerData.name}</strong> - ${providerData.phone}
+                    <p>Rating: ${formattedRating}</p>
+                    <p>Status: <span class="status online">Online</span></p>
+               
+                    <p>price: ${providerData.woork_type}</p>  <!-- Display Work Type -->
+                    <a href="#" class="btn btn-primary book-now" type="button"
+                        data-id="${providerData.id}" data-phone="${providerData.phone}" 
+                        customerid="{{ customer.user.id }}" 
+                        customername="{{ customer.user.username }}" 
+                        customerphone="{{ customer.user.phone }} "
+                        serviceprovidername="${providerData.name}" 
+                        profile="${providerData.photo_url}">
+                        Book Now
+                    </a>
+                `;
+            } else {
+                // If provider is offline, add them to the list (if not already added) and show as offline
+                if (!providerItem) {
+                    providerItem = document.createElement('li');
+                    providerItem.id = `provider-${providerData.id}`;
+                    providerList.appendChild(providerItem);
+                }
+        
+                providerItem.innerHTML = `
+                    <img src="${providerData.photo_url}" alt="${providerData.name}'s Profile Picture" class="profile-picture">
+                    <strong>${providerData.name}</strong> - ${providerData.phone}
+                    <p>Average Rating: ${formattedRating}</p>
+                    <p>Status: <span class="status offline">Offline</span></p>
+               
+                    <p>price: ${providerData.woork_type}</p>  <!-- Display Work Type -->
+                    <a href="#" class="btn btn-primary book-now" type="button"
+                        data-id="${providerData.id}" data-phone="${providerData.phone}" 
+                        customerid="{{ customer.user.id }}" 
+                        customername="{{ customer.user.username }}" 
+                        customerphone="{{ customer.user.phone }} "
+                        serviceprovidername="${providerData.name}" 
+                        profile="${providerData.photo_url}">
+                        Book Now
+                    </a>
+                `;
+            }
+        }
+        
 
     
+        // Listen for Firebase data changes with a service_type filter
+        const serviceProviderRef = query(ref(database, 'search-service/'), orderByChild('service_type'), equalTo(serviceType));
+        onValue(serviceProviderRef, (snapshot) => {
+            const data = snapshot.val();
+            
+            // Iterate over all providers in Firebase and update the list
+            for (const providerId in data) {
+                const providerData = data[providerId];
+                
+                // If provider data exists, update or remove them
+                if (providerData && providerId) {
+                    updateProviderList({
+                        id: providerId,  // Use the Firebase key as the provider id
+                        is_online: providerData.is_online,
+                        name: providerData.name,
+                        photo_url: providerData.photo_url,
+                        phone: providerData.phone,
+                        rating: providerData.rating || 0,  // Default to 0 if no rating
+                        distance: providerData.distance || "N/A",  // Add the distance field
+                        woork_type: providerData.woork_type  // Add work type
+                    });
+                }
+            }
+        });
+    </script>
+
+    <script>
+        // Pass customer data to JavaScript
+        var customerData = {
+            id: "{{ customer.user.id }}",
+            username: "{{ customer.user.username }}",
+            phone: "{{ customer.user.phone }}"
+        };
+    </script>
+
 </head>
 <body>
-    <h1>Nearest {{ service_type }} Providers</h1>
+    <h1>Nearest {{ service_type }} </h1>
     <input type="hidden" id="service-type" value="{{ service_type }}">
-    <div id="map"></div>
-
-    <ul>
-        {% for provider in service_providers %}
-            <li>
-                <img src="{{ provider.service_provider.user.kyc.photo.url }}" 
-                     alt="{{ provider.service_provider.user.kyc.name }}'s Profile Picture" 
-                     class="profile-picture">
-                <strong>{{ provider.service_provider.user.kyc.name }}</strong> - 
-                {{ provider.service_provider.phone }} 
-                <a href="#" class="btn btn-primary book-now" 
-                    data-id="{{ provider.service_provider.user.id }}" 
-                    data-phone="{{ provider.service_provider.phone }}"
-                    customerid="{{customer.user.id}}" 
-                    customername="{{customer.user.username}}" 
-                    customerphone="{{ customer.user.phone }}">
-                    Book Now
-
+    
+    <!-- Display the list of service providers -->
+    <ul id="provider-list">
+        {% comment %} {% for provider in providers %}
+            <li id="provider-{{ provider.provider_location.id }}">
+                <img src="{{ provider.provider_location.service_provider.photo_url }}" alt="{{ provider.provider_location.service_provider.name }}'s Profile Picture" class="profile-picture">
+                <strong>{{ provider.provider_location.service_provider.name }}</strong> - {{ provider.provider_location.service_provider.phone }}
+                <p>Rating: {{ provider.rating }}</p>
+                <p>Status: <span class="status {% if provider.is_online %}online{% else %}offline{% endif %}">
+                    {% if provider.is_online %}Online{% else %}Offline{% endif %}
+                </span></p>
+                <p>Distance: {{ provider.distance }} km</p>
+                <p>Work Type: {{ provider.woork_type }}</p>  <!-- Display Work Type -->
+                <a href="#" class="btn btn-primary book-now" type="button"
+                   data-id="{{ provider.provider_location.id }}" 
+                   data-phone="{{ provider.provider_location.service_provider.phone }}" 
+                   customerid="{{ customer.id }}" 
+                   customername="{{ customer.user.username }}" 
+                   customerphone="{{ customer.user.phone }}"
+                   serviceprovidername="{{ provider.provider_location.service_provider.name }}" 
+                   profile="{{ provider.provider_location.service_provider.photo_url }}">
+                   Book Now
                 </a>
             </li>
         {% empty %}
-            <li>No service providers found.</li>
-        {% endfor %}
+            <p>No {{ service_type }} providers found in your area.</p>
+        {% endfor %} {% endcomment %}
     </ul>
+    <script src='{% static "sms.js" %}'></script>
 
-    <!-- JavaScript Section -->
-    <script>
-        var customerLocation = {
-            longitude: {{ customer_location.longitude }},
-            latitude: {{ customer_location.latitude }}
-        };
-    
-        var serviceProviders = [
-            {% for provider in service_providers %}
-                {
-                    name: "{{ provider.service_provider.user.kyc.name }}",
-                    longitude: {{ provider.longitude }},
-                    latitude: {{ provider.latitude }}
-                },
-            {% endfor %}
-        ];
-    </script>
-    
-    <script src="{% static 'map.js' %}"></script>
-    <script src="{% static 'sms.js' %}"></script>
 </body>
 </html>

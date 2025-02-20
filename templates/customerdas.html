@@ -8,167 +8,118 @@
     <meta name="csrf-token" content="{{ csrf_token }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="{% static 'customerdas.css' %}?v={{ STATIC_VERSION }}">
+    <link rel="stylesheet" href="{% static 'customerdas1.css' %}?v={{ STATIC_VERSION }}">
+
     <title>Welcome | HandiQ</title>
     <style>
         body {
-            background: url("{% static 'images/carpenter.svg' %}");
+            background: url("{% static 'images/carpenter.svg' %}") no-repeat center center fixed;
+            background-size: cover;
             font-family: 'Arial', sans-serif;
             height: 100vh;
             display: flex;
             flex-direction: column;
             color: #fff;
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-        }
-
-        .hamburger-menu {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-        }
-
-        .hamburger-menu div {
-            width: 25px;
-            height: 3px;
-            background-color: #fff;
-            margin: 4px 0;
-        }
-
-        .menu {
-            display: none;
-            position: absolute;
-            top: 60px;
-            right: 20px;
-            background-color: #333;
-            border-radius: 5px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .menu.active {
-            display: block;
-        }
-
-        .menu ul {
-            list-style: none;
-            padding: 10px;
             margin: 0;
         }
 
-        .menu ul li {
-            margin: 10px 0;
+        .search-bar input {
+            background: transparent;
+            color: white;
+            border: 1px solid white;
+            padding: 10px;
+            width: 70%;
+            font-size: 1rem;
         }
 
-        .menu ul li a {
-            color: #fff;
-            text-decoration: none;
+        .search-bar input::placeholder {
+            color: #ddd;
+        }
+
+        .search-bar button {
+            background: #512da8;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+
+        /* Styles for Hamburger Menu */
+        .menu ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .menu li {
+            margin: 10px 0;
+            position: relative;
             display: block;
         }
 
-        .menu ul li a:hover {
-            text-decoration: underline;
+        .menu li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 12px 20px;
+            display: block;
+            background: transparent;
+            border-radius: 8px;
+            transition: background-color 0.3s, transform 0.3s;
         }
 
-        @media (max-width: 768px) {
-            .hamburger-menu {
-                display: flex;
-            }
-
-            .profile-dropdown {
-                display: none;
-            }
+        .menu li a:hover {
+            background: transparent;
+            transform: translateX(5px);
         }
 
-        /* Popup container */
-        .popup {
-            position: fixed;
-            top: 0;
+        /* Submenu Styles */
+        .submenu {
+            display: none;
+            position: absolute;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-
-        /* Popup content */
-        .popup-content {
-            background: linear-gradient(135deg, #512da8, #673ab7);
-            color: #fff;
-            padding: 20px 30px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
-            transform: scale(0.5);
-            animation: popup-show 0.5s ease forwards;
-        }
-
-        .popup-content i {
-            font-size: 50px;
-            color: #4caf50;
-            margin-bottom: 10px;
-            animation: bounce 1s infinite;
-        }
-
-        .popup-content h2 {
-            font-size: 1.8rem;
-            margin: 10px 0;
-        }
-
-        .popup-content p {
-            font-size: 1rem;
-            margin-bottom: 15px;
-        }
-
-        .popup-content button {
-            background: #4caf50;
-            border: none;
-            color: #fff;
-            padding: 10px 20px;
+            top: 100%; /* This places it below the parent item */
+            background-color: transparent; /* Make the background transparent */
             border-radius: 5px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background 0.3s ease;
+            z-index: 100;
+            padding: 10px 0;
+            min-width: 200px;
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
         }
 
-        .popup-content button:hover {
-            background: #388e3c;
-        }
-
-        /* Show popup */
-        .popup.show {
+        /* Only show submenu when hovering over the "View Order Details" */
+        .menu li.view-order:hover .submenu {
+            display: block;
             opacity: 1;
-            pointer-events: all;
+            background-color: transparent; /* When shown, this will have a background */
         }
 
-        /* Animations */
-        @keyframes popup-show {
-            from {
-                transform: scale(0.5);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
+        .submenu li {
+            margin: 0;
         }
 
-        @keyframes bounce {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
+        .submenu li a {
+            padding: 8px 15px;
+            font-size: 1rem;
+            background-color: transparent;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .submenu li a:hover {
+            background: transparent;
+            transform: translateX(5px);
+        }
+
+        /* Optional styles for making the menu feel compact and clean */
+        .menu {
+            background: transparent;
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
+
+        .hamburger-menu {
+            cursor: pointer;
         }
     </style>
 </head>
@@ -185,8 +136,14 @@
         </div>
         <div class="menu" id="menu">
             <ul>
-                <li><a href="/viewprofile/">Order Details</a></li>
-                <li><a href="#" id="logout-btn">Logout</a></li>
+                <li class="view-order">
+                    <a href="#">View Order Details</a>
+                    <!-- Submenu for "View Order Details" -->
+                    <ul class="submenu">
+                        <li><a href="/booking-history/">Booking History</a></li>
+                    </ul>
+                </li>
+                <li><a href="/signup/serviceprovider/" id="logout-btn">Logout</a></li>
             </ul>
         </div>
     </nav>
@@ -196,7 +153,7 @@
         <p>Find exactly what you need</p>
         <div class="search-bar">
             <form action="{% url 'search_service_providers' %}" method="get">
-                <input type="text" id="search-input" name="service_type" list="services" placeholder="What are you looking for?" autocomplete="off">
+                <input type="text" id="search-input" name="service_type" list="services" placeholder="Searching for..." autocomplete="off">
                 <datalist id="services">
                     <option value="Carpenter">
                     <option value="Painter">
@@ -208,49 +165,82 @@
         </div>
     </div>
 
-    <!-- Booking Confirmation Popup -->
-    <div id="bookingConfirmation" class="popup hidden">
-        <div class="popup-content">
-            <i class="fas fa-check-circle"></i>
-            <h2>Booking Confirmed!</h2>
-            <p>Your service provider will contact you soon.</p>
-           <a href="ORDR.HTML"><button id="closePopup">Close</button></a>
-        </div>
-    </div>
-
-    <script src="{% static 'customerdas.js' %}"></script>
-    <script src="{% static 'logout.js' %}"></script>
-    <script src="{% static 'customerlocation.js' %}"></script>
     <script>
-        document.getElementById('hamburger-menu').addEventListener('click', function() {
+        document.getElementById('hamburger-menu').addEventListener('click', function () {
             document.getElementById('menu').classList.toggle('active');
         });
 
-        document.getElementById('logout-btn').addEventListener('click', function() {
-            document.getElementById('logoutModal').style.display = 'block';
+        // Adding the confirmation popup for logout
+        document.getElementById('logout-btn').addEventListener('click', function (event) {
+            event.preventDefault(); // Prevent default link action
+
+            // Create a confirmation dialog
+            const confirmationDialog = document.createElement('div');
+            confirmationDialog.style.position = 'fixed';
+            confirmationDialog.style.top = '50%';
+            confirmationDialog.style.left = '50%';
+            confirmationDialog.style.transform = 'translate(-50%, -50%)';
+            confirmationDialog.style.backgroundColor = '#fff';
+            confirmationDialog.style.padding = '20px';
+            confirmationDialog.style.boxShadow = '0px 4px 10px rgba(0, 0, 0, 0.3)';
+            confirmationDialog.style.borderRadius = '10px';
+            confirmationDialog.style.textAlign = 'center';
+            confirmationDialog.style.zIndex = '1000';
+
+            // Content inside the dialog
+            confirmationDialog.innerHTML = `
+                <p style="font-size: 1.2rem; color: #333; margin-bottom: 20px;">Do you want to logout?</p>
+                <button id="confirm-logout" style="background-color: #512da8; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-right: 10px;">Yes</button>
+                <button id="cancel-logout" style="background-color: #f44336; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">No</button>
+            `;
+
+            // Append the dialog to the body
+            document.body.appendChild(confirmationDialog);
+
+            // Add event listeners for the buttons
+            document.getElementById('confirm-logout').addEventListener('click', function () {
+                // Redirect to the sign-in page
+                window.location.href = "/signup/customer/";
+            });
+
+            document.getElementById('cancel-logout').addEventListener('click', function () {
+                // Remove the dialog
+                document.body.removeChild(confirmationDialog);
+            });
         });
 
-        document.getElementById('cancelLogout').addEventListener('click', function() {
-            document.getElementById('logoutModal').style.display = 'none';
-        });
+        // Typewriter Effect for Search Placeholder
+        const serviceOptions = ["Carpenter", "Painter", "Electrician", "Plumber"];
+        let currentIndex = 0;
+        let charIndex = 0;
 
-        // Simulate booking confirmation
-        function showBookingConfirmation() {
-            const popup = document.getElementById('bookingConfirmation');
-            popup.classList.add('show');
-            setTimeout(() => {
-                popup.classList.remove('show');
-            }, 3000); // Auto-close after 3 seconds
+        function typePlaceholder() {
+            const searchInput = document.getElementById('search-input');
+            const prefix = "Search for ";
+            const currentText = serviceOptions[currentIndex];
+            const displayText = prefix + currentText.substring(0, charIndex);
+
+            searchInput.placeholder = displayText;
+
+            if (charIndex < currentText.length) {
+                charIndex++;
+                setTimeout(typePlaceholder, 100); // Typing speed
+            } else {
+                // Pause before moving to the next service
+                setTimeout(() => {
+                    charIndex = 0;
+                    currentIndex = (currentIndex + 1) % serviceOptions.length;
+                    typePlaceholder();
+                }, 2000); // 2-second pause before cycling
+            }
         }
 
-        document.getElementById('closePopup').addEventListener('click', function() {
-            const popup = document.getElementById('bookingConfirmation');
-            popup.classList.remove('show');
-        });
-
-        // Example: Call this function when booking is successful
-        // showBookingConfirmation();
+        // Start the typewriter effect
+        typePlaceholder();
     </script>
+    <script src="{% static 'customerlocation.js' %}"></script>
 </body>
 
 </html>
+    
+

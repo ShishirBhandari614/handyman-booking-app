@@ -1,8 +1,5 @@
 from django.db import models
 from django.conf import settings
-
-# Create your models here.
-
 from django.contrib.auth.models import User
 
 class CustomerLocation(models.Model):
@@ -12,8 +9,6 @@ class CustomerLocation(models.Model):
 
     def __str__(self):
         return f"{self.customer.user.username} - ({self.latitude}, {self.longitude})"
-
-
 class ServiceProviderLocation(models.Model):
     service_provider = models.ForeignKey("userauth.ServiceProvider", on_delete=models.CASCADE, related_name="serviceprovider_location")
     latitude = models.FloatField()
@@ -22,3 +17,8 @@ class ServiceProviderLocation(models.Model):
 
     def __str__(self):
         return f"{self.service_provider.user.username} - ({self.latitude}, {self.longitude})"
+
+
+from django.db import models
+from userauth.models import User  # Assuming you have a User model
+

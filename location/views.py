@@ -1,14 +1,11 @@
 from django.shortcuts import render
-
-# Create your views here.
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from userauth.models import ServiceProvider
+
 import json
 from location.models import CustomerLocation, ServiceProviderLocation
-
-
-@csrf_protect
 @login_required
 def save_location(request):
     if request.method == 'POST':
@@ -17,9 +14,6 @@ def save_location(request):
         user_type = data.get('user_type')
         latitude = data.get('latitude')
         longitude = data.get('longitude')
-
-       
-        # Check if the user is associated with a customer or service provider
         if user_type == 'customer':
            
             if hasattr(request.user, 'customer'):
@@ -57,8 +51,7 @@ def update_status(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         is_online = data.get('is_online')
-
-        # Ensure the user is a service provider
+        
         if hasattr(request.user, 'serviceprovider'):
             service_provider = request.user.serviceprovider
             
@@ -73,3 +66,5 @@ def update_status(request):
         return JsonResponse({'error': 'User is not a service provider.'}, status=400)
 
     return JsonResponse({'error': 'Invalid request method.'}, status=400)
+
+

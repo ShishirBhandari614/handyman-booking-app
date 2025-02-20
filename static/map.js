@@ -1,3 +1,4 @@
+// Initialize OpenLayers map
 var map = new ol.Map({
     target: 'map',
     layers: [
@@ -7,76 +8,108 @@ var map = new ol.Map({
     ],
     view: new ol.View({
         center: ol.proj.fromLonLat([customerLocation.longitude, customerLocation.latitude]),
-        zoom: 5
+        zoom: 10
     })
 });
 
+// Create vector layer for markers
 var vectorSource = new ol.source.Vector();
-var extent = ol.extent.createEmpty();
+var markerLayer = new ol.layer.Vector({ source: vectorSource });
+map.addLayer(markerLayer);
 
-serviceProviders.forEach(function(provider) {
-    var marker = new ol.Feature({
-        geometry: new ol.geom.Point(ol.proj.fromLonLat([provider.longitude, provider.latitude])),
-        name: provider.name
+// Store service provider markers for dynamic updates
+var providerMarkers = {};
+
+// Function to add or update markers
+function updateProviderMarker(providerData) {
+    let providerId = providerData.id;
+
+    if (providerMarkers[providerId]) {
+        if (providerData.is_online) {
+            // Update existing marker position for online providers
+            providerMarkers[providerId].setGeometry(new ol.geom.Point(
+                ol.proj.fromLonLat([providerData.longitude, providerData.latitude])
+            ));
+        }
+    } else {
+        // Create a new marker if it doesn't exist
+        let marker = new ol.Feature({
+            geometry: new ol.geom.Point(ol.proj.fromLonLat([providerData.longitude, providerData.latitude])),
+            name: providerData.name
+        });
+
+        // Style the marker based on online/offline status
+        marker.setStyle(new ol.style.Style({
+            image: new ol.style.Icon({
+                anchor: [0.5, 1],
+                scale: 0.8,
+                src: providerData.is_online
+                    ? 'https://cdn-icons-png.flaticon.com/32/149/149059.png' // Green for online
+                    : 'https://cdn-icons-png.flaticon.com/32/149/149060.png' // Gray for offline
+            }),
+            text: new ol.style.Text({
+                text: providerData.name,
+                offsetY: -25,
+                font: '12px Arial',
+                fill: new ol.style.Fill({ color: providerData.is_online ? 'black' : 'gray' }),
+                stroke: new ol.style.Stroke({ color: 'white', width: 2 })
+            })
+        }));
+
+        vectorSource.addFeature(marker);
+        providerMarkers[providerId] = marker;
+    }
+}
+
+// Function to add customer marker
+function addCustomerMarker() {
+    let customerMarker = new ol.Feature({
+        geometry: new ol.geom.Point(ol.proj.fromLonLat([customerLocation.longitude, customerLocation.latitude])),
+        name: "You"
     });
 
-    marker.setStyle(new ol.style.Style({
+    customerMarker.setStyle(new ol.style.Style({
         image: new ol.style.Icon({
             anchor: [0.5, 1],
             scale: 0.8,
-            src: 'https://cdn-icons-png.flaticon.com/32/149/149059.png'
+            src: 'https://cdn-icons-png.flaticon.com/32/149/149060.png'
         }),
         text: new ol.style.Text({
-            text: provider.name,
+            text: "You",
             offsetY: -25,
             font: '12px Arial',
-            fill: new ol.style.Fill({ color: 'black' }),
+            fill: new ol.style.Fill({ color: 'blue' }),
             stroke: new ol.style.Stroke({ color: 'white', width: 2 })
         })
     }));
 
-    vectorSource.addFeature(marker);
-    ol.extent.extend(extent, marker.getGeometry().getExtent());
-});
+    vectorSource.addFeature(customerMarker);
+}
 
-var customerMarker = new ol.Feature({
-    geometry: new ol.geom.Point(ol.proj.fromLonLat([customerLocation.longitude, customerLocation.latitude])),
-    name: "You"
-});
+// Function to listen for Firebase changes and update map
+function listenForFirebaseUpdates() {
+    const serviceProviderRef = ref(database, 'search-service/');
+    onValue(serviceProviderRef, (snapshot) => {
+        const data = snapshot.val();
 
-customerMarker.setStyle(new ol.style.Style({
-    image: new ol.style.Icon({
-        anchor: [0.5, 1],
-        scale: 0.8,
-        src: 'https://cdn-icons-png.flaticon.com/32/149/149060.png'
-    }),
-    text: new ol.style.Text({
-        text: "You",
-        offsetY: -25,
-        font: '12px Arial',
-        fill: new ol.style.Fill({ color: 'blue' }),
-        stroke: new ol.style.Stroke({ color: 'white', width: 2 })
-    })
-}));
+        for (const providerId in data) {
+            const providerData = data[providerId];
 
-vectorSource.addFeature(customerMarker);
-ol.extent.extend(extent, customerMarker.getGeometry().getExtent());
-
-var markerLayer = new ol.layer.Vector({
-    source: vectorSource
-});
-map.addLayer(markerLayer);
-
-if (serviceProviders.length > 0) {
-    map.getView().fit(extent, {
-        padding: [50, 50, 50, 50],
-        maxZoom: 14,
-        duration: 1000
+            if (providerData && providerId) {
+                updateProviderMarker({
+                    id: providerId,
+                    is_online: providerData.is_online,
+                    name: providerData.name,
+                    longitude: providerData.longitude,
+                    latitude: providerData.latitude
+                });
+            }
+        }
     });
 }
 
-map.on('click', function(event) {
-    map.forEachFeatureAtPixel(event.pixel, function(feature) {
-        alert('Service Provider: ' + feature.get('name'));
-    });
+// Initialize map with customer marker and Firebase listener
+document.addEventListener('DOMContentLoaded', () => {
+    addCustomerMarker();
+    listenForFirebaseUpdates();
 });

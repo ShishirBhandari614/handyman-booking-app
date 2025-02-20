@@ -1,16 +1,12 @@
 from django.shortcuts import render
 from kycverification.models import KYC
 from location.models import CustomerLocation, ServiceProviderLocation
-
-# Create your views here.
-
-
+from ratings.models import ServiceProviderAvgRating, Booking
 from math import radians, sin, cos, sqrt, atan2
 import heapq
 
-# Haversine formula to calculate distance between two coordinates
 def haversine_distance(lat1, lon1, lat2, lon2):
-    R = 6371  # Radius of the Earth in km
+    R = 6371  
     lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
     
     dlat = lat2 - lat1
@@ -20,12 +16,11 @@ def haversine_distance(lat1, lon1, lat2, lon2):
     c = 2 * atan2(sqrt(a), sqrt(1 - a))
     
     return R * c
+    print(f"Calculated Distance: {distance} km")
+    return distance
 
-# Dijkstra's algorithm to find the nearest service providers
 def dijkstra_algorithm(customer_location, service_providers):
     graph = {}
-    
-    # Build the graph with distance calculations
     for provider in service_providers:
         dist = haversine_distance(
             customer_location.latitude, customer_location.longitude, 
@@ -33,7 +28,6 @@ def dijkstra_algorithm(customer_location, service_providers):
         )
         graph[(provider.latitude, provider.longitude)] = (provider, dist)
 
-    # Priority queue for finding shortest path
     pq = [(0, (customer_location.latitude, customer_location.longitude))]
     visited = set()
     distances = {}
@@ -51,36 +45,71 @@ def dijkstra_algorithm(customer_location, service_providers):
             if neighbor not in visited:
                 heapq.heappush(pq, (current_distance + weight, neighbor))
 
-    # Sort by distance and return sorted service providers
     sorted_providers = sorted(
         graph.values(), key=lambda x: distances.get((x[0].latitude, x[0].longitude), float('inf'))
     )
     
     return sorted_providers
 
+from django.shortcuts import render
+
+
 def search_service_providers(request):
     service_type = request.GET.get('service_type')
-    customer = request.user.customer
-    print(customer.user.id)
-    print(customer)
+    print(f"Service Type: {service_type}") 
 
+    customer = request.user.customer
     customer_location = CustomerLocation.objects.get(customer=customer)
 
-    # Fetch verified and online service providers of requested type
     service_providers = ServiceProviderLocation.objects.filter(
-    service_provider__user__kyc__service_type=service_type,
-    service_provider__user__kyc__is_verified=True,
-    is_online=True
-)
-    # Apply Dijkstra's algorithm to find nearest providers
-    sorted_providers = dijkstra_algorithm(customer_location, service_providers)
+        service_provider__user__kyc__service_type__iexact=service_type,  
+        service_provider__user__kyc__is_verified=True
+    )
+
+    providers_with_ratings_and_distance = []
+
+    for provider_location in service_providers:
+        service_provider = provider_location.service_provider
+        kyc_info = service_provider.user.kyc 
+
+        
+        avg_rating = ServiceProviderAvgRating.objects.filter(user=service_provider.user).first()
+        rating = avg_rating.average_rating if avg_rating else 0 
+
+        recent_booking = Booking.objects.filter(service_provider=service_provider).order_by('-booking_date').first()
+        status = recent_booking.status if recent_booking else 'pending'
+
+        distance = haversine_distance(
+            customer_location.latitude, customer_location.longitude, 
+            provider_location.latitude, provider_location.longitude
+        )
+        print(f"Distance to {service_provider.user.username}: {distance} km") 
+        print(f"woork_type for {service_provider.user.username}: {kyc_info.woork_type}") 
+
+        if distance <= 3 and status != 'pending' and status:
+            providers_with_ratings_and_distance.append({
+                'service_type': service_type,
+                'provider_location': provider_location,
+                'rating': round(rating, 2),  
+                'is_online': provider_location.is_online,
+                'distance': round(distance, 2), 
+                'status': status,
+                'woork_type': kyc_info.woork_type,  
+            })
+
+    providers_with_ratings_and_distance.sort(key=lambda x: (x['rating'], x['distance']), reverse=True)
+
+    online_providers = [provider for provider in providers_with_ratings_and_distance if provider['is_online']]
+    offline_providers = [provider for provider in providers_with_ratings_and_distance if not provider['is_online']]
+
+    all_providers_sorted = online_providers + offline_providers
 
     context = {
         'customer_location': customer_location,
-        'service_providers': [provider[0] for provider in sorted_providers[:5]],  # Get top 5 nearest
+        'providers': all_providers_sorted,  
         'service_type': service_type,
-        'customer':customer
+        'customer': customer,
+        'woork_types': [provider['woork_type'] for provider in all_providers_sorted],  
     }
-    print(service_providers)
-    return render(request, 'search_results.html', context)
 
+    return render(request, 'search_results.html', context)

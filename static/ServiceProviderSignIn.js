@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const username = document.getElementById('login-username').value;
        
         const password = document.getElementById('login-password').value;
-      
+        
         const requestData = {
             action:"login", // Add the action field explicitly
             username: username,
